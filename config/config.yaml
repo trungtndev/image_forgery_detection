@@ -23,18 +23,11 @@ wandb:
 
 
 model:
-  d_model: 256
+  d_model: 224
 
   #spatial transformer
+  pretrain: true
   requires_grad: true
-  img_size: 256
-  patch_size: 7
-  in_chans: 3
-  embed_dim: 64
-  depths: [ 2, 2, 8, 2 ]
-  num_heads: [ 3, 6, 8, 12 ]
-  window_size: [ 12, 7, 6, 4 ]
-  mlp_ratio: 4
   drop_rate: 0.1
   proj_drop_rate: 0.1
   attn_drop_rate: 0.1

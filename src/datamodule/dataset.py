@@ -6,7 +6,7 @@ class ImageForgeryDataset(Dataset):
         self.data = data
 
         self.transform = tr.Compose([
-            tr.Resize((256, 256)),
+            tr.Resize((224, 224)),
             tr.ToTensor()
         ])
 

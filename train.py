@@ -15,15 +15,9 @@ def train(config):
 
     model_module = Model(
         d_model=config.model.d_model,
+        # spatial transformer
+        pretrain=config.model.pretrain,
         requires_grad=config.model.requires_grad,
-        img_size=config.model.img_size,
-        patch_size=config.model.patch_size,
-        in_chans=config.model.in_chans,
-        embed_dim=config.model.embed_dim,
-        depths=config.model.depths,
-        num_heads=config.model.num_heads,
-        window_size=config.model.window_size,
-        mlp_ratio=config.model.mlp_ratio,
         drop_rate=config.model.drop_rate,
         proj_drop_rate=config.model.proj_drop_rate,
         attn_drop_rate=config.model.attn_drop_rate,
@@ -37,15 +31,15 @@ def train(config):
         val_batch_size=config.data.val_batch_size
     )
 
-    wandb_logger = WandbLogger(name=config.wandb.name,
-                    project=config.wandb.project,
-                    log_model=config.wandb.log_model,
-                    config=dict(config),
-                    )
-    wandb_logger.watch(model_module,
-                 log="all",
-                 log_freq=10,
-                 )
+    # wandb_logger = WandbLogger(name=config.wandb.name,
+    #                 project=config.wandb.project,
+    #                 log_model=config.wandb.log_model,
+    #                 config=dict(config),
+    #                 )
+    # wandb_logger.watch(model_module,
+    #              log="all",
+    #              log_freq=50,
+    #              )
 
     lasted_checkpoint_callback = pl.callbacks.ModelCheckpoint(
         dirpath="checkpoint",
@@ -71,7 +65,7 @@ def train(config):
 
         callbacks=[lr_callback, checkpoint_callback, lasted_checkpoint_callback],
 
-        logger=wandb_logger,
+        # logger=wandb_logger,
     )
     trainer.fit(model_module, data_module)
 
