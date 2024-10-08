@@ -140,4 +140,3 @@ cython_debug/
 # PyTorch Lightning
 lightning_logs/
 wandb/
-checkpoint/
