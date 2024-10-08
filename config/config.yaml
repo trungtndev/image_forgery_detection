@@ -9,11 +9,11 @@ trainer:
         save_top_k: 1
         monitor: val_acc
         mode: max
-        filename: '{epoch}-{val_ExpRate:.4f}'
+        filename: '{epoch}-{val_acc:.6f}'
   gpus: 0 # 1, 2, 3
   accelerator: cpu
-  check_val_every_n_epoch: 4 # 5
-  max_epochs: 250
+  check_val_every_n_epoch: 2 # 5
+  max_epochs: 50
   deterministic: true
 
 wandb:
@@ -32,6 +32,11 @@ model:
   proj_drop_rate: 0.1
   attn_drop_rate: 0.1
   drop_path_rate: 0.1
+
+  # training
+  learning_rate: 0.0001
+  weight_decay: 0.0
+  patience: 8
 
 data:
   folder_path: "data/CASIA1"

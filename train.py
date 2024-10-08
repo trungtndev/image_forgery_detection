@@ -21,7 +21,12 @@ def train(config):
         drop_rate=config.model.drop_rate,
         proj_drop_rate=config.model.proj_drop_rate,
         attn_drop_rate=config.model.attn_drop_rate,
-        drop_path_rate=config.model.drop_path_rate
+        drop_path_rate=config.model.drop_path_rate,
+
+        # training
+        learning_rate=config.model.learning_rate,
+        weight_decay=config.model.weight_decay,
+        patience=config.model.patience
     )
 
     data_module = ImageForgeryDatamMdule(

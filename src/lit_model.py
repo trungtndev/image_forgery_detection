@@ -34,7 +34,13 @@ class Model(pl.LightningModule):
                  drop_rate: float,
                  proj_drop_rate: float,
                  attn_drop_rate: float,
-                 drop_path_rate: float):
+                 drop_path_rate: float,
+
+                 # training
+                 learning_rate: float,
+                 weight_decay: float,
+                 patience: int,
+                 ):
         super().__init__()
         self.spatial = SwinV1Encoder(
             d_model=d_model,
@@ -56,7 +62,9 @@ class Model(pl.LightningModule):
         return x
 
     def configure_optimizers(self):
-        optimizer = torch.optim.Adam(self.parameters(), lr=1e-3)
+        optimizer = torch.optim.Adam(self.parameters(),
+                                     lr=self.hparams.learning_rate,
+                                     weight_decay=self.hparams.weight_decay)
         # scheduler_warmup = WarmupCosineAnnealingLR(optimizer, warmup_epochs=5, total_epochs=50)
         # lateau_scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer,
         #                                                               'min')
@@ -66,7 +74,7 @@ class Model(pl.LightningModule):
         #     "interval": "epoch",
         #     "strict": True,
         # }
-        return [optimizer]#, [scheduler]
+        return [optimizer]  # , [scheduler]
 
     def training_step(self, batch, batch_idx):
         images, labels = batch
