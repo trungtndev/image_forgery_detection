@@ -1,10 +1,10 @@
 from torch.utils.data.dataloader import DataLoader
 import pytorch_lightning as pl
-from PIL import Image
+from PIL import Image, ImageFile
 import os
 
 from .dataset import ImageForgeryDataset
-
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 def extract_data(folder_path: str, type_path: str):
     data = []
