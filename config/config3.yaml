@@ -10,7 +10,7 @@ trainer:
         save_top_k: 1
         monitor: val_ExpRate
         mode: max
-        filename: '{epoch}-{val_ExpRate:.4f}'
+        filename: '{epoch}-{val_acc:.4f}'
   # gpus: 1
   gpus: 2 # 1, 2, 3
   accelerator: ddp

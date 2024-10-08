@@ -1,20 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="553fd17e-c948-49ea-b1b5-d41d259d976a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/image_forgery_detection.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config/config.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config/config3.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/CASIA1/test/fake/Sp_S_NNN_T_txt0068_txt0068_0068.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/CASIA1/test/real/Sp_S_NNN_T_txt0076_txt0076_0076.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/CASIA1/train/fake/Sp_S_NNN_T_txt0071_txt0071_0071.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/CASIA1/train/real/Sp_S_NNN_T_txt0074_txt0074_0074.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/CASIA1/val/fake/Sp_S_NNN_T_txt0073_txt0073_0073.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/CASIA1/val/real/Sp_S_NNN_T_txt0072_txt0072_0072.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/datamodule/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/datamodule/datamodule.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/datamodule/dataset.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lit_model.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/model/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/model/frequency_module.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/model/spatial_module.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/train.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Jupyter Notebook" />
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 6
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
   <component name="ProjectId" id="2n6e3viqnXhxNwi8EkICaJRawAK" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -25,12 +60,31 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
+    "last_opened_file_path": "H:/CoMER-master",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\image_forgery_detection\config" />
+      <recent name="D:\image_forgery_detection\data\CASIA1\val" />
+      <recent name="D:\image_forgery_detection\data\CASIA1\test" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\image_forgery_detection\data\CASIA1\val\real" />
+      <recent name="D:\image_forgery_detection\data\CASIA1\val\fake" />
+      <recent name="D:\image_forgery_detection\data\CASIA1\train\real" />
+      <recent name="D:\image_forgery_detection\data\CASIA1\train\fake" />
+      <recent name="D:\image_forgery_detection\data\CASIA1\test\real" />
+    </key>
+  </component>
   <component name="RunManager">
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+    <configuration name="train" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="image_forgery_detection" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -44,7 +98,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="SCRIPT_NAME" value="D:\image_forgery_detection\train.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -70,19 +124,16 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1728297756509</updated>
-      <workItem from="1728297757612" duration="22000" />
+      <workItem from="1728297757612" duration="297000" />
+      <workItem from="1728298086016" duration="4497000" />
+      <workItem from="1728306790680" duration="14881000" />
+      <workItem from="1728367651673" duration="5238000" />
+      <workItem from="1728375157060" duration="261000" />
+      <workItem from="1728375745705" duration="2389000" />
     </task>
     <servers />
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>8</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>
