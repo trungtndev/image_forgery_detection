@@ -42,6 +42,7 @@ class SwinV1Encoder(pl.LightningModule):
         #     torch.nn.Dropout(drop_rate),
         # )
         self.swinv1.head.fc = torch.nn.Linear(768, 2, bias=True)
+        self.swinv1.head.flatten = torch.nn.Softmax(dim=-1)
 
         # make sure the head is trainable
         for param in self.swinv1.head.parameters():
