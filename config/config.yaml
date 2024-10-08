@@ -10,8 +10,9 @@ trainer:
         monitor: val_acc
         mode: max
         filename: '{epoch}-{val_acc:.6f}'
-  gpus: 0 # 1, 2, 3
   accelerator: cpu
+  devices: 1
+  strategy: ddp
   check_val_every_n_epoch: 2 # 5
   max_epochs: 50
   deterministic: true
