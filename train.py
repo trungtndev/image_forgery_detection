@@ -1,8 +1,6 @@
-from venv import logger
 
 from sconf import Config
 import argparse
-import os
 import pytorch_lightning as pl
 from pytorch_lightning.loggers import WandbLogger
 
@@ -36,15 +34,15 @@ def train(config):
         val_batch_size=config.data.val_batch_size
     )
 
-    # wandb_logger = WandbLogger(name=config.wandb.name,
-    #                 project=config.wandb.project,
-    #                 log_model=config.wandb.log_model,
-    #                 config=dict(config),
-    #                 )
-    # wandb_logger.watch(model_module,
-    #              log="all",
-    #              log_freq=50,
-    #              )
+    wandb_logger = WandbLogger(name=config.wandb.name,
+                    project=config.wandb.project,
+                    log_model=config.wandb.log_model,
+                    config=dict(config),
+                    )
+    wandb_logger.watch(model_module,
+                 log="all",
+                 log_freq=50,
+                 )
 
     lasted_checkpoint_callback = pl.callbacks.ModelCheckpoint(
         dirpath="checkpoint",
@@ -70,7 +68,7 @@ def train(config):
 
         callbacks=[lr_callback, checkpoint_callback, lasted_checkpoint_callback],
 
-        # logger=wandb_logger,
+        logger=wandb_logger,
     )
     trainer.fit(model_module, data_module)
 
