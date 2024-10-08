@@ -44,7 +44,7 @@ def train(config):
                     )
     wandb_logger.watch(model_module,
                  log="all",
-                 log_freq=100
+                 log_freq=10,
                  )
 
     lasted_checkpoint_callback = pl.callbacks.ModelCheckpoint(
