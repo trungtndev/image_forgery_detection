@@ -120,6 +120,7 @@ class HybridCNNGRU(nn.Module):
         self.gru = nn.Sequential(
             GRUBlock(input_size=d_model, hidden_size=hidden_size),
             nn.LayerNorm(hidden_size),
+            nn.GELU(),
         )
 
     def forward(self, x):
@@ -133,4 +134,3 @@ class HybridCNNGRU(nn.Module):
                       h=self.patch_size)
         return out
 
-# print(GRUBlock(128, 256)(torch.rand(1, 10, 128)).shape)

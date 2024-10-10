@@ -62,7 +62,7 @@ class LitModel(pl.LightningModule):
             drop_path_rate=drop_path_rate
         )
 
-        self.ferquency = HybridCNNGRU(
+        self.frequency = HybridCNNGRU(
             d_model=d_model,
             patch_size=patch_size,
             hidden_size=hidden_size,
@@ -84,9 +84,9 @@ class LitModel(pl.LightningModule):
         self.test_accuracy = Accuracy(task='multiclass', num_classes=2)
         self.save_hyperparameters()
 
-    def forward(self, img):
-        x_1 = self.spatial(img)
-        x_2 = self.ferquency(img)
+    def forward(self, spa, fre):
+        x_1 = self.spatial(spa)
+        x_2 = self.frequency(fre)
 
         x = self.fusion(x_1, x_2)
         return x
@@ -112,8 +112,8 @@ class LitModel(pl.LightningModule):
         return [optimizer], [scheduler]
 
     def training_step(self, batch, batch_idx):
-        images, labels = batch
-        outputs = self(images)
+        spa, fre, labels = batch
+        outputs = self(spa, fre)
 
         loss = self.compute_loss(outputs, labels)
         self.train_accuracy(outputs, labels)
@@ -128,8 +128,8 @@ class LitModel(pl.LightningModule):
         return loss
 
     def validation_step(self, batch, batch_idx):
-        images, labels = batch
-        outputs = self(images)
+        spa, fre, labels = batch
+        outputs = self(spa, fre)
 
         loss = self.compute_loss(outputs, labels)
         self.val_accuracy(outputs, labels)
@@ -144,8 +144,8 @@ class LitModel(pl.LightningModule):
                  sync_dist=True)
 
     def test_step(self, batch, batch_idx):
-        images, labels = batch
-        outputs = self(images)
+        spa, fre, labels = batch
+        outputs = self(spa, fre)
 
         loss = self.compute_loss(outputs, labels)
         self.test_accuracy(outputs, labels)
