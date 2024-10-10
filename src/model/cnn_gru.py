@@ -32,7 +32,7 @@ class PatchExtractor(nn.Module):
 class CNN(nn.Module):
     def __init__(self, input_channels):
         super(CNN, self).__init__()
-        self.module = nn.Sequential(
+        self.cnn = nn.Sequential(
             nn.Conv2d(input_channels, 32, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(32),
             nn.GELU(),
@@ -59,7 +59,7 @@ class CNN(nn.Module):
         )
 
     def forward(self, x):
-        x = self.module(x)
+        x = self.cnn(x)
         return x
 
 
@@ -103,7 +103,7 @@ class HybridCNNGRU(nn.Module):
         n_patch = (image_size // patch_size)
         self.num_patches = (n_patch, n_patch)
 
-        self.module = nn.Sequential(
+        self.cnn_gru = nn.Sequential(
             ImageToFrequency(),
             CNN(input_channels),
 
@@ -124,7 +124,7 @@ class HybridCNNGRU(nn.Module):
         )
 
     def forward(self, x):
-        x = self.module(x)
+        x = self.cnn_gru(x)
 
         x = rearrange(x, 'b (w h) d -> b w h d',
                       w=self.patch_size,

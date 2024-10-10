@@ -15,7 +15,7 @@ class FrequencyModule(pl.LightningModule):
                  drop_rate=0.1,
                  ):
         super(FrequencyModule, self).__init__()
-        self.module = HybridCNNGRU(
+        self.hy = HybridCNNGRU(
             d_model,
             patch_size=patch_size,
             input_channels=input_channels,
@@ -24,4 +24,4 @@ class FrequencyModule(pl.LightningModule):
         )
 
     def forward(self, x) -> Any:
-        return self.module(x)
+        return self.hy(x)
