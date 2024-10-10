@@ -41,21 +41,24 @@ class AttentionFusionModule(nn.Module):
 
 class Fusion(pl.LightningModule):
     def __init__(self, d_model: int,
+                 mlp_ratio: int,
+                 dropout: float,
+                 num_classes: int,
                  input_dim_feature_1: int,
                  input_dim_feature_2: int,
-                 num_classes: int):
+                 ):
         super(Fusion, self).__init__()
         self.attention_fusion = AttentionFusionModule(input_dim_feature_1,
                                                       input_dim_feature_2,
                                                       d_model)
-        self.mlp = FeedForward(d_model, 4, 0.1)
+        self.mlp = FeedForward(d_model, mlp_ratio, dropout)
         self.norm = nn.LayerNorm(d_model)
 
         self.classifier = ClassifierHead(d_model, num_classes)
 
     def forward(self, feature_1, feature_2):
         fused_features = self.attention_fusion(feature_1, feature_2)
-        x = self.mlp(fused_features)
+        x = fused_features + self.mlp(fused_features)
         x = self.norm(x)
 
         x = self.classifier(x)
