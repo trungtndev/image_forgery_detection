@@ -5,7 +5,6 @@ import torch
 from einops import rearrange
 
 from torch import nn
-from timm.layers import ClassifierHead
 
 class FeedForward(nn.Module):
     def __init__(self, input_size, mlp_ratio, dropout_rate):
@@ -71,14 +70,17 @@ class Fusion(pl.LightningModule):
                                                       input_dim_feature_2,
                                                       d_model)
         self.mlp = FeedForward(d_model, mlp_ratio, dropout)
-        self.norm = nn.LayerNorm(d_model)
+        self.norm1 = nn.LayerNorm(d_model)
+        self.norm2 = nn.LayerNorm(d_model)
         self.classifier = nn.Linear(d_model, num_classes)
 
     def forward(self, feature_1, feature_2):
+        feature_1 = rearrange(feature_1, 'b h w c -> b (h w) c')
+        feature_2 = rearrange(feature_2, 'b h w c -> b (h w) c')
 
         fused_features = self.attention_fusion(feature_1, feature_2)
         x = fused_features + self.mlp(fused_features)
-        x = x.mean(dim=(1, 2))
+        x = self.norm2(x)
+        x = x.mean(dim=1)
         x = self.classifier(x)
         return x
-

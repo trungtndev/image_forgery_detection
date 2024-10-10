@@ -103,30 +103,29 @@ class HybridCNNGRU(nn.Module):
         n_patch = (image_size // patch_size)
         self.num_patches = (n_patch, n_patch)
 
-        self.cnn_gru = nn.Sequential(
+        self.cnn = nn.Sequential(
             ImageToFrequency(),
             CNN(input_channels),
-
-            PatchExtractor(self.patch_size ,self.num_patches),
+        )
+        self.patch_emb = nn.Sequential(
+            PatchExtractor(self.patch_size, self.num_patches),
             nn.Linear(in_features=8192, out_features=d_model),
             nn.LayerNorm(d_model),
             nn.Dropout(drop_rate),
-
+        )
+        self.gru = nn.Sequential(
             GRUBlock(input_size=d_model, hidden_size=hidden_size),
             nn.LayerNorm(hidden_size),
-
-            # GRUBlock(input_size=d_model, hidden_size=hidden_size*2),
-            # nn.LayerNorm(hidden_size*2),
-            # nn.Dropout(drop_rate),
-            #
-            # GRUBlock(input_size=hidden_size*2, hidden_size=hidden_size),
-            # nn.LayerNorm(hidden_size),
         )
 
     def forward(self, x):
-        x = self.cnn_gru(x)
+        out = self.cnn(x)
+        out = self.patch_emb(out)
 
-        x = rearrange(x, 'b (w h) d -> b w h d',
+        out = self.gru(out)
+
+        out = rearrange(out, 'b (w h) d -> b w h d',
                       w=self.patch_size,
                       h=self.patch_size)
-        return x
+        return out
+
