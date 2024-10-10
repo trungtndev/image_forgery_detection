@@ -26,7 +26,6 @@ class PatchExtractor(nn.Module):
         x = rearrange(x, 'b c (h p1) (w p2) -> b (h w) (c p1 p2)',
                       p1=self.num_patches[0],
                       p2=self.num_patches[1])
-
         return x
 
 
@@ -37,7 +36,7 @@ class CNN(nn.Module):
             nn.Conv2d(input_channels, 32, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(32),
             nn.GELU(),
-            nn.AvgPool2d(kernel_size=2, stride=1, padding=1),
+            nn.AvgPool2d(kernel_size=2, stride=2, padding=1),
 
             nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(64),
@@ -47,15 +46,16 @@ class CNN(nn.Module):
             nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(128),
             nn.GELU(),
-            nn.AvgPool2d(kernel_size=2, stride=1),
+            nn.AvgPool2d(kernel_size=2, stride=2, padding=1),
 
             nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(256),
             nn.GELU(),
+            nn.AvgPool2d(kernel_size=2, stride=1, padding=0),
 
             nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(512),
-            nn.GELU(),
+            nn.SiLU(),
         )
 
     def forward(self, x):
@@ -95,7 +95,7 @@ class HybridCNNGRU(nn.Module):
                  drop_rate=0.1,
                  ):
         super(HybridCNNGRU, self).__init__()
-        image_size = 112
+        image_size = 28
 
         self.patch_size = patch_size
         self.image_size = image_size
@@ -108,7 +108,7 @@ class HybridCNNGRU(nn.Module):
             CNN(input_channels),
 
             PatchExtractor(self.patch_size ,self.num_patches),
-            nn.LazyLinear(d_model),
+            nn.Linear(in_features=8192, out_features=d_model),
             nn.LayerNorm(d_model),
             nn.Dropout(drop_rate),
 
@@ -116,7 +116,11 @@ class HybridCNNGRU(nn.Module):
             nn.LayerNorm(hidden_size),
             nn.Dropout(drop_rate),
 
-            GRUBlock(input_size=hidden_size, hidden_size=hidden_size),
+            GRUBlock(input_size=d_model, hidden_size=hidden_size*2),
+            nn.LayerNorm(hidden_size*2),
+            nn.Dropout(drop_rate),
+
+            GRUBlock(input_size=hidden_size*2, hidden_size=hidden_size),
             nn.LayerNorm(hidden_size),
         )
 
@@ -127,5 +131,3 @@ class HybridCNNGRU(nn.Module):
                       w=self.patch_size,
                       h=self.patch_size)
         return x
-
-

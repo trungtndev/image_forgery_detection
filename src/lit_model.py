@@ -34,6 +34,7 @@ class LitModel(pl.LightningModule):
     def __init__(self,
                  num_classes: int,
                  d_model: int,
+
                  pretrain: bool,
                  requires_grad: bool,
                  drop_rate: float,
@@ -44,6 +45,7 @@ class LitModel(pl.LightningModule):
                  hidden_size: int,
                  image_size: int,
                  patch_size: int,
+                 mlp_ratio: int,
 
                  # training
                  learning_rate: float,
@@ -70,7 +72,7 @@ class LitModel(pl.LightningModule):
 
         self.fusion = Fusion(
             d_model=d_model,
-            mlp_ratio=4,
+            mlp_ratio=mlp_ratio,
             dropout=drop_rate,
             num_classes=num_classes,
             input_dim_feature_1=768,

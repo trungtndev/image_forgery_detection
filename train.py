@@ -22,6 +22,13 @@ def train(config):
         attn_drop_rate=config.model.attn_drop_rate,
         drop_path_rate=config.model.drop_path_rate,
 
+        # frequency transformer
+
+        hidden_size=config.model.hidden_size,
+        image_size=config.model.image_size,
+        patch_size=config.model.patch_size,
+        mlp_ratio=config.model.mlp_ratio,
+
         # training
         learning_rate=config.model.learning_rate,
         weight_decay=config.model.weight_decay,
