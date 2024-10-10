@@ -1,12 +1,16 @@
 import pytorch_lightning as pl
 import torch
 import torch.nn.functional as F
-from .model.spatial_module import SwinV1Encoder
 from typing import Tuple
 from torchmetrics import Accuracy
 from torch.optim.lr_scheduler import _LRScheduler
 import math
+from einops import rearrange
 
+
+from .model.spatial_module import SwinV1Encoder
+from .model.fusion import Fusion
+from .model.cnn_gru import HybridCNNGRU
 
 class WarmupCosineAnnealingLR(_LRScheduler):
     def __init__(self, optimizer, warmup_epochs, total_epochs, eta_min=0, last_epoch=-1):
@@ -37,6 +41,10 @@ class LitModel(pl.LightningModule):
                  attn_drop_rate: float,
                  drop_path_rate: float,
 
+                 hidden_size: int,
+                 image_size: int,
+                 patch_size: int,
+
                  # training
                  learning_rate: float,
                  weight_decay: float,
@@ -44,7 +52,6 @@ class LitModel(pl.LightningModule):
                  ):
         super().__init__()
         self.spatial = SwinV1Encoder(
-            d_model=d_model,
             pretrain=pretrain,
             requires_grad=requires_grad,
             drop_rate=drop_rate,
@@ -53,13 +60,33 @@ class LitModel(pl.LightningModule):
             drop_path_rate=drop_path_rate
         )
 
+        self.ferquency = HybridCNNGRU(
+            d_model=d_model,
+            patch_size=patch_size,
+            hidden_size=hidden_size,
+            input_channels=3,
+            drop_rate=drop_rate,
+        )
+
+        self.fusion = Fusion(
+            d_model=d_model,
+            mlp_ratio=4,
+            dropout=drop_rate,
+            num_classes=num_classes,
+            input_dim_feature_1=768,
+            input_dim_feature_2=hidden_size,
+        )
+
         self.train_accuracy = Accuracy(task='multiclass', num_classes=2)
         self.val_accuracy = Accuracy(task='multiclass', num_classes=2)
         self.test_accuracy = Accuracy(task='multiclass', num_classes=2)
         self.save_hyperparameters()
 
     def forward(self, img):
-        x = self.spatial(img)
+        x_1 = self.spatial(img)
+        x_2 = self.ferquency(img)
+
+        x = self.fusion(x_1, x_2)
         return x
 
     def configure_optimizers(self):

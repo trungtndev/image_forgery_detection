@@ -2,12 +2,31 @@ from typing import Any
 
 import pytorch_lightning as pl
 import torch
+from einops import rearrange
+
 from torch import nn
 from timm.layers import ClassifierHead
-from .cnn_gru import FeedForward
+
+class FeedForward(nn.Module):
+    def __init__(self, input_size, mlp_ratio, dropout_rate):
+        super(FeedForward, self).__init__()
+        self.module = nn.Sequential(
+            nn.Linear(input_size, input_size * mlp_ratio),
+            nn.LayerNorm(input_size * mlp_ratio),
+            nn.GELU(),
+            nn.Dropout(dropout_rate),
+
+            nn.Linear(input_size * mlp_ratio, input_size)
+        )
+
+    def forward(self, x):
+        return self.module(x)
 
 class AttentionFusionModule(nn.Module):
-    def __init__(self, input_dim_feature_1, input_dim_feature_2, output_dim):
+    def __init__(self,
+                 input_dim_feature_1,
+                 input_dim_feature_2,
+                 output_dim):
         super(AttentionFusionModule, self).__init__()
 
         self.fc1 = nn.Sequential(
@@ -53,13 +72,13 @@ class Fusion(pl.LightningModule):
                                                       d_model)
         self.mlp = FeedForward(d_model, mlp_ratio, dropout)
         self.norm = nn.LayerNorm(d_model)
-
-        self.classifier = ClassifierHead(d_model, num_classes)
+        self.classifier = nn.Linear(d_model, num_classes)
 
     def forward(self, feature_1, feature_2):
+
         fused_features = self.attention_fusion(feature_1, feature_2)
         x = fused_features + self.mlp(fused_features)
-        x = self.norm(x)
-
+        x = x.mean(dim=(1, 2))
         x = self.classifier(x)
         return x
+
