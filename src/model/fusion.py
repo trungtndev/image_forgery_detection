@@ -40,10 +40,17 @@ class AttentionFusionModule(nn.Module):
             nn.ReLU(),
         )
 
-        self.attention = nn.Sequential(
+        self.attention1 = nn.Sequential(
             nn.Linear(output_dim, output_dim),
             nn.Tanh(),
-            nn.Linear(output_dim, 1),
+            nn.Linear(output_dim, output_dim),
+            nn.Softmax(dim=1)
+        )
+
+        self.attention2 = nn.Sequential(
+            nn.Linear(output_dim, output_dim),
+            nn.Tanh(),
+            nn.Linear(output_dim, output_dim),
             nn.Softmax(dim=1)
         )
 
@@ -51,8 +58,8 @@ class AttentionFusionModule(nn.Module):
         out1 = self.fc1(feature_1)
         out2 = self.fc2(feature_2)
 
-        attn_weights1 = self.attention(out1)
-        attn_weights2 = self.attention(out2)
+        attn_weights1 = self.attention1(out1)
+        attn_weights2 = self.attention2(out2)
 
         fused = attn_weights1 * out1 + attn_weights2 * out2
         return fused

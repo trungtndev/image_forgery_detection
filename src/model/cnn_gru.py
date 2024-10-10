@@ -55,7 +55,7 @@ class CNN(nn.Module):
 
             nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(512),
-            nn.SiLU(),
+            nn.GELU(),
         )
 
     def forward(self, x):
@@ -111,6 +111,7 @@ class HybridCNNGRU(nn.Module):
             PatchExtractor(self.patch_size, self.num_patches),
             nn.Linear(in_features=8192, out_features=d_model),
             nn.LayerNorm(d_model),
+            nn.SiLU(),
             nn.Dropout(drop_rate),
         )
         self.gru = nn.Sequential(
