@@ -116,12 +116,12 @@ class HybridCNNGRU(nn.Module):
             nn.LayerNorm(hidden_size),
             nn.Dropout(drop_rate),
 
-            GRUBlock(input_size=d_model, hidden_size=hidden_size*2),
-            nn.LayerNorm(hidden_size*2),
-            nn.Dropout(drop_rate),
-
-            GRUBlock(input_size=hidden_size*2, hidden_size=hidden_size),
-            nn.LayerNorm(hidden_size),
+            # GRUBlock(input_size=d_model, hidden_size=hidden_size*2),
+            # nn.LayerNorm(hidden_size*2),
+            # nn.Dropout(drop_rate),
+            #
+            # GRUBlock(input_size=hidden_size*2, hidden_size=hidden_size),
+            # nn.LayerNorm(hidden_size),
         )
 
     def forward(self, x):
