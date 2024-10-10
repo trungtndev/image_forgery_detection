@@ -5,13 +5,14 @@ import pytorch_lightning as pl
 from pytorch_lightning.loggers import WandbLogger
 
 
-from src.lit_model import Model
+from src.lit_model import LitModel
 from src.datamodule.datamodule import ImageForgeryDatamMdule
 
 def train(config):
     pl.seed_everything(config.seed_everything, workers=True)
 
-    model_module = Model(
+    model_module = LitModel(
+        num_classes=config.model.num_classes,
         d_model=config.model.d_model,
         # spatial transformer
         pretrain=config.model.pretrain,
@@ -68,8 +69,9 @@ def train(config):
         deterministic=config.trainer.deterministic,
 
         callbacks=[lr_callback, checkpoint_callback, lasted_checkpoint_callback],
-
         logger=wandb_logger,
+
+        log_every_n_steps=10
     )
     trainer.fit(model_module, data_module)
 

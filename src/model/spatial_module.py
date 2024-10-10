@@ -1,5 +1,5 @@
 from typing import Any
-
+import torch.nn as nn
 import torch
 import timm
 import numpy as np
@@ -41,8 +41,13 @@ class SwinV1Encoder(pl.LightningModule):
         #     torch.nn.GELU(),
         #     torch.nn.Dropout(drop_rate),
         # )
-        self.swinv1.head.fc = torch.nn.Linear(768, 2, bias=True)
-        self.swinv1.head.flatten = torch.nn.Softmax(dim=-1)
+        self.swinv1.head.fc = torch.nn.Sequential(
+            torch.nn.Linear(768, 512, bias=True),
+            nn.LayerNorm(512),
+            torch.nn.GELU(),
+
+            nn.Linear(512, 2, bias=True),
+            torch.nn.Softmax(dim=-1))
 
         # make sure the head is trainable
         for param in self.swinv1.head.parameters():

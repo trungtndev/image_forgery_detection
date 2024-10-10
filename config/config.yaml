@@ -12,7 +12,7 @@ trainer:
         filename: '{epoch}-{val_acc:.6f}'
   accelerator: cpu
   devices: 1
-  strategy: ddp
+  strategy: auto
   check_val_every_n_epoch: 2 # 5
   max_epochs: 50
   deterministic: true
@@ -24,6 +24,7 @@ wandb:
 
 
 model:
+  num_classes: 2
   d_model: 224
 
   #spatial transformer

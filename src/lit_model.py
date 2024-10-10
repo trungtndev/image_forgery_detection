@@ -26,8 +26,9 @@ class WarmupCosineAnnealingLR(_LRScheduler):
                     for base_lr in self.base_lrs]
 
 
-class Model(pl.LightningModule):
+class LitModel(pl.LightningModule):
     def __init__(self,
+                 num_classes: int,
                  d_model: int,
                  pretrain: bool,
                  requires_grad: bool,
@@ -66,15 +67,20 @@ class Model(pl.LightningModule):
                                      lr=self.hparams.learning_rate,
                                      weight_decay=self.hparams.weight_decay)
         # scheduler_warmup = WarmupCosineAnnealingLR(optimizer, warmup_epochs=5, total_epochs=50)
-        # lateau_scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer,
-        #                                                               'min')
-        # scheduler = {
-        #     "scheduler": lateau_scheduler,
-        #     "monitor": "val_acc",
-        #     "interval": "epoch",
-        #     "strict": True,
-        # }
-        return [optimizer]  # , [scheduler]
+        lateau_scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer,
+            'max',
+            factor=0.25,
+            patience=self.hparams.patience // self.trainer.check_val_every_n_epoch,
+        )
+        scheduler = {
+            "scheduler": lateau_scheduler,
+            "monitor": "val_acc",
+            "interval": "epoch",
+            "frequency": self.trainer.check_val_every_n_epoch,
+            "strict": True,
+        }
+        return [optimizer], [scheduler]
 
     def training_step(self, batch, batch_idx):
         images, labels = batch
