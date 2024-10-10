@@ -29,9 +29,8 @@ class SwinV1Encoder(pl.LightningModule):
 
         self.swinv1.load_state_dict(swinv1_state_dict)
 
-        if pretrain:
-            for param in self.swinv1.parameters():
-                param.requires_grad = requires_grad
+        for param in self.parameters():
+            param.requires_grad = False
 
         self.swinv1.head = nn.Identity()
 

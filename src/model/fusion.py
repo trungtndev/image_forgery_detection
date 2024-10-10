@@ -76,7 +76,12 @@ class Fusion(pl.LightningModule):
         self.attention_fusion = AttentionFusionModule(input_dim_feature_1,
                                                       input_dim_feature_2,
                                                       d_model)
-        self.mlp = FeedForward(d_model, mlp_ratio, dropout)
+        # self.mlp = FeedForward(d_model, mlp_ratio, dropout)
+        self.mlp = nn.Sequential(
+            nn.Linear(d_model, d_model*2),
+            nn.LayerNorm(d_model * 2),
+            nn.SiLU(),
+        )
         self.norm1 = nn.LayerNorm(d_model)
         self.norm2 = nn.LayerNorm(d_model)
         self.classifier = nn.Linear(d_model, num_classes)
@@ -85,9 +90,11 @@ class Fusion(pl.LightningModule):
         feature_1 = rearrange(feature_1, 'b h w c -> b (h w) c')
         feature_2 = rearrange(feature_2, 'b h w c -> b (h w) c')
 
-        fused_features = self.attention_fusion(feature_1, feature_2)
-        x = fused_features + self.mlp(fused_features)
-        x = self.norm2(x)
+        x = self.attention_fusion(feature_1, feature_2)
+        # x = fused_features + self.mlp(fused_features)
+        x = self.norm1(x)
+        x = self.mlp(x)
+
         x = x.mean(dim=1)
         x = self.classifier(x)
         return x
