@@ -7,3 +7,5 @@ torchvision~=0.19.1
 pillow~=10.4.0
 torchmetrics~=1.4.0.post0
 sconf~=0.2.5
+einops
+torch_dct

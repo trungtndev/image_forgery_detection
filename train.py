@@ -3,7 +3,7 @@ from sconf import Config
 import argparse
 import pytorch_lightning as pl
 from pytorch_lightning.loggers import WandbLogger
-
+from pytorch_lightning.strategies import DDPStrategy
 
 from src.lit_model import LitModel
 from src.datamodule.datamodule import ImageForgeryDatamMdule
@@ -70,7 +70,7 @@ def train(config):
     trainer = pl.Trainer(
         accelerator=config.trainer.accelerator,
         devices=config.trainer.devices,
-        strategy=config.trainer.strategy,
+        strategy=DDPStrategy(find_unused_parameters=True),
         check_val_every_n_epoch=config.trainer.check_val_every_n_epoch,
         max_epochs=config.trainer.max_epochs,
         deterministic=config.trainer.deterministic,

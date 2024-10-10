@@ -12,7 +12,6 @@ trainer:
         filename: '{epoch}-{val_acc:.6f}'
   accelerator: cpu
   devices: 1
-  strategy: auto
   check_val_every_n_epoch: 2 # 5
   max_epochs: 50
   deterministic: true
