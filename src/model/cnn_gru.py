@@ -12,18 +12,20 @@ class ImageToFrequency(nn.Module):
         self.dct = dct_2d
 
     def forward(self, x):
-        x = self.dct(x)
+        x = self.dct(x, norm='ortho')
         return x
 
 
 class PatchExtractor(nn.Module):
-    def __init__(self, patch_size):
+    def __init__(self, patch_size, num_patches):
         super(PatchExtractor, self).__init__()
         self.patch_size = patch_size
+        self.num_patches = num_patches
 
     def forward(self, x):
         x = rearrange(x, 'b c (h p1) (w p2) -> b (h w) (c p1 p2)',
-                      p1=self.patch_size, p2=self.patch_size)
+                      p1=self.num_patches // self.num_patches,
+                      p2=self.num_patches // self.num_patches)
         return x
 
 
@@ -34,28 +36,27 @@ class CNN(nn.Module):
             nn.Conv2d(input_channels, 32, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(32),
             nn.GELU(),
-            nn.AvgPool2d(kernel_size=3, stride=1),
+            nn.AvgPool2d(kernel_size=2, ),
 
             nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(64),
             nn.GELU(),
-            nn.AvgPool2d(kernel_size=3, stride=1),
+            nn.AvgPool2d(kernel_size=2, ),
 
             nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(128),
             nn.GELU(),
-            nn.AvgPool2d(kernel_size=3, stride=2),
+            nn.AvgPool2d(kernel_size=2, ),
 
             nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(256),
             nn.GELU(),
-            nn.AvgPool2d(kernel_size=3, stride=1),
+            nn.AvgPool2d(kernel_size=2, ),
 
             nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(512),
             nn.GELU(),
-            nn.AvgPool2d(kernel_size=3, stride=1),
-
+            nn.AvgPool2d(kernel_size=2, ),
         )
 
     def forward(self, x):
@@ -83,34 +84,43 @@ class GRUBlock(nn.Module):
         outputs = torch.cat(outputs, dim=1)
         return outputs
 
-class MLP(nn.Module):
+
+class FeedForward(nn.Module):
     def __init__(self, input_size, mlp_ratio, dropout_rate):
-        super(MLP, self).__init__()
+        super(FeedForward, self).__init__()
         self.module = nn.Sequential(
-            nn.Linear(input_size, input_size*mlp_ratio),
-            nn.LayerNorm(input_size*mlp_ratio),
+            nn.Linear(input_size, input_size * mlp_ratio),
+            nn.LayerNorm(input_size * mlp_ratio),
             nn.GELU(),
             nn.Dropout(dropout_rate),
-            nn.Linear(input_size*mlp_ratio, input_size)
+
+            nn.Linear(input_size * mlp_ratio, input_size)
         )
 
     def forward(self, x):
-        return self.module(x) + x
+        return self.module(x)
+
 
 class HybridCNNGRU(nn.Module):
     def __init__(self,
                  d_model,
-                 mlp_ratio=4,
+                 image_size=224,
+                 patch_size=7,
                  input_channels=3,
                  hidden_size=128,
                  drop_rate=0.1,
                  ):
         super(HybridCNNGRU, self).__init__()
 
+        self.patch_size = patch_size
+        self.image_size = image_size
+        assert image_size % patch_size == 0, 'image size must be divisible by patch size'
+        self.num_patches = (image_size // patch_size) * 2
+
         self.module = nn.Sequential(
             ImageToFrequency(),
             CNN(input_channels),
-            PatchExtractor(7),
+            PatchExtractor(self.patch_size ,self.num_patches),
             nn.LazyLinear(d_model),
             nn.LayerNorm(d_model),
             nn.Dropout(drop_rate),
@@ -124,4 +134,9 @@ class HybridCNNGRU(nn.Module):
 
     def forward(self, x):
         x = self.module(x)
+        x = rearrange(x, 'b (w h) d -> b w h d',
+                      w=self.patch_size,
+                      h=self.patch_size)
         return x
+
+

@@ -42,12 +42,17 @@ class SwinV1Encoder(pl.LightningModule):
         #     torch.nn.Dropout(drop_rate),
         # )
         self.swinv1.head.fc = torch.nn.Sequential(
-            torch.nn.Linear(768, 512, bias=True),
+            torch.nn.Linear(768, 1024, bias=True),
+            nn.LayerNorm(1024),
+            torch.nn.LeakyReLU(),
+            nn.Dropout(drop_rate),
+
+            torch.nn.Linear(1024, 512, bias=True),
             nn.LayerNorm(512),
-            torch.nn.GELU(),
+            torch.nn.LeakyReLU(),
 
             nn.Linear(512, 2, bias=True),
-            torch.nn.Softmax(dim=-1))
+        )
 
         # make sure the head is trainable
         for param in self.swinv1.head.parameters():
