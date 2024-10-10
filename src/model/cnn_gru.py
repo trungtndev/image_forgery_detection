@@ -1,10 +1,11 @@
 import torch
-from torch.nn import functional as F
 import torch.nn as nn
 from einops import rearrange
 
 from torch_dct import dct_2d
 
+def log_magnitude(f_shift):
+    return torch.log(1 + torch.abs(f_shift))
 
 class ImageToFrequency(nn.Module):
     def __init__(self):
@@ -12,7 +13,9 @@ class ImageToFrequency(nn.Module):
         self.dct = dct_2d
 
     def forward(self, x):
-        x = self.dct(x, norm='ortho')
+        x = dct_2d(x, norm='ortho')
+        x = torch.fft.fftshift(x)
+        x = log_magnitude(x)
         return x
 
 
@@ -130,3 +133,4 @@ class HybridCNNGRU(nn.Module):
                       h=self.patch_size)
         return out
 
+# print(GRUBlock(128, 256)(torch.rand(1, 10, 128)).shape)
