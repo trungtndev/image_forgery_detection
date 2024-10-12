@@ -9,7 +9,7 @@ trainer:
         save_top_k: 1
         monitor: val_acc
         mode: max
-        filename: '{epoch}-{val_acc:.6f}'
+        filename: '{epoch}-{step}-{val_acc:.6f}'
   accelerator: cpu
   devices: 1
   check_val_every_n_epoch: 2 # 5

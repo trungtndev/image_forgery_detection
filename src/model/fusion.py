@@ -63,8 +63,8 @@ class Fusion(pl.LightningModule):
 
 if __name__ == '__main__':
     fusion = Fusion(256, 0.2, 2)
-    feature_1 = torch.randn(2, 7, 7, 256)
-    feature_2 = torch.randn(2, 7, 7, 256)
+    feature_1 = torch.randn(10, 7, 7, 256)
+    feature_2 = torch.randn(10, 7, 7, 256)
     output = fusion(feature_1, feature_2)
     print(output.shape)
     print(output)

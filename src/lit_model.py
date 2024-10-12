@@ -84,7 +84,7 @@ class LitModel(pl.LightningModule):
         return x
 
     def configure_optimizers(self):
-        optimizer = torch.optim.Adam(self.parameters(),
+        optimizer = torch.optim.SGD(self.parameters(),
                                      lr=self.hparams.learning_rate,
                                      weight_decay=self.hparams.weight_decay)
         # scheduler_warmup = WarmupCosineAnnealingLR(optimizer, warmup_epochs=5, total_epochs=50)
