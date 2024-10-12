@@ -27,6 +27,7 @@ class Classifer(nn.Module):
         super(Classifer, self).__init__()
         self.dropout = nn.Dropout(dropout_rate)
         self.fc = nn.Linear(input_size, input_size*2)
+        self.bn = nn.BatchNorm1d(input_size*2)
         self.output = nn.Linear(input_size*2, num_classes)
 
     def forward(self, x):
@@ -34,6 +35,7 @@ class Classifer(nn.Module):
         x = x.mean(dim=1)
         x = self.dropout(x)
         x = self.fc(x)
+        x = self.bn(x)
         x = nn.functional.gelu(x)
         x = self.output(x)
         return x
@@ -55,6 +57,8 @@ class Fusion(pl.LightningModule):
         attn = self.sigmoid(out)
 
         out = feature_1 * attn + feature_2 * (1 - attn)
+
+        out = torch.nn.functional.gelu(out)
 
         out = self.classifier(out)
 
