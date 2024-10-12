@@ -27,17 +27,14 @@ model:
   d_model: 256
 
   #spatial transformer
-  pretrain: true
-  requires_grad: true
+  requires_grad: false
   drop_rate: 0.1
   proj_drop_rate: 0.1
   attn_drop_rate: 0.1
   drop_path_rate: 0.1
 
-  hidden_size: 256
-  image_size: 224
-  patch_size: 7
-  mlp_ratio: 2
+  growth_rate: 16
+  num_layers: 12
 
   # training
   learning_rate: 0.0001

@@ -15,7 +15,6 @@ def train(config):
         num_classes=config.model.num_classes,
         d_model=config.model.d_model,
         # spatial transformer
-        pretrain=config.model.pretrain,
         requires_grad=config.model.requires_grad,
         drop_rate=config.model.drop_rate,
         proj_drop_rate=config.model.proj_drop_rate,
@@ -23,11 +22,8 @@ def train(config):
         drop_path_rate=config.model.drop_path_rate,
 
         # frequency transformer
-
-        hidden_size=config.model.hidden_size,
-        image_size=config.model.image_size,
-        patch_size=config.model.patch_size,
-        mlp_ratio=config.model.mlp_ratio,
+        growth_rate=config.model.growth_rate,
+        num_layers=config.model.num_layers,
 
         # training
         learning_rate=config.model.learning_rate,
@@ -42,15 +38,15 @@ def train(config):
         val_batch_size=config.data.val_batch_size
     )
 
-    wandb_logger = WandbLogger(name=config.wandb.name,
-                    project=config.wandb.project,
-                    log_model=config.wandb.log_model,
-                    config=dict(config),
-                    )
-    wandb_logger.watch(model_module,
-                 log="all",
-                 log_freq=200   ,
-                 )
+    # wandb_logger = WandbLogger(name=config.wandb.name,
+    #                 project=config.wandb.project,
+    #                 log_model=config.wandb.log_model,
+    #                 config=dict(config),
+    #                 )
+    # wandb_logger.watch(model_module,
+    #              log="all",
+    #              log_freq=200   ,
+    #              )
 
     lasted_checkpoint_callback = pl.callbacks.ModelCheckpoint(
         dirpath="checkpoint",
@@ -70,13 +66,13 @@ def train(config):
     trainer = pl.Trainer(
         accelerator=config.trainer.accelerator,
         devices=config.trainer.devices,
-        strategy=DDPStrategy(find_unused_parameters=True),
+        # strategy=DDPStrategy(find_unused_parameters=True),
         check_val_every_n_epoch=config.trainer.check_val_every_n_epoch,
         max_epochs=config.trainer.max_epochs,
         deterministic=config.trainer.deterministic,
 
         callbacks=[lr_callback, checkpoint_callback, lasted_checkpoint_callback],
-        logger=wandb_logger,
+        # logger=wandb_logger,
 
         log_every_n_steps=10
     )

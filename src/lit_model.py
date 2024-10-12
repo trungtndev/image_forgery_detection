@@ -10,7 +10,7 @@ from einops import rearrange
 
 from .model.spatial_module import SwinV1Encoder
 from .model.fusion import Fusion
-from .model.cnn_gru import HybridCNNGRU
+from .model.densenet import Encoder
 
 class WarmupCosineAnnealingLR(_LRScheduler):
     def __init__(self, optimizer, warmup_epochs, total_epochs, eta_min=0, last_epoch=-1):
@@ -35,17 +35,14 @@ class LitModel(pl.LightningModule):
                  num_classes: int,
                  d_model: int,
 
-                 pretrain: bool,
                  requires_grad: bool,
                  drop_rate: float,
                  proj_drop_rate: float,
                  attn_drop_rate: float,
                  drop_path_rate: float,
 
-                 hidden_size: int,
-                 image_size: int,
-                 patch_size: int,
-                 mlp_ratio: int,
+                growth_rate: int,
+                num_layers: int,
 
                  # training
                  learning_rate: float,
@@ -54,7 +51,7 @@ class LitModel(pl.LightningModule):
                  ):
         super().__init__()
         self.spatial = SwinV1Encoder(
-            pretrain=pretrain,
+            d_model=d_model,
             requires_grad=requires_grad,
             drop_rate=drop_rate,
             proj_drop_rate=proj_drop_rate,
@@ -62,21 +59,16 @@ class LitModel(pl.LightningModule):
             drop_path_rate=drop_path_rate
         )
 
-        self.frequency = HybridCNNGRU(
+        self.frequency = Encoder(
             d_model=d_model,
-            patch_size=patch_size,
-            hidden_size=hidden_size,
-            input_channels=3,
-            drop_rate=drop_rate,
+            num_layers=num_layers,
+            growth_rate=growth_rate,
         )
 
         self.fusion = Fusion(
             d_model=d_model,
-            mlp_ratio=mlp_ratio,
-            dropout=drop_rate,
             num_classes=num_classes,
-            input_dim_feature_1=768,
-            input_dim_feature_2=hidden_size,
+            dropout=drop_rate,
         )
 
         self.train_accuracy = Accuracy(task='multiclass', num_classes=2)

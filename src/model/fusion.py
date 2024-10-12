@@ -6,6 +6,7 @@ from einops import rearrange
 
 from torch import nn
 
+
 class FeedForward(nn.Module):
     def __init__(self, input_size, mlp_ratio, dropout_rate):
         super(FeedForward, self).__init__()
@@ -21,80 +22,49 @@ class FeedForward(nn.Module):
     def forward(self, x):
         return self.module(x)
 
-class AttentionFusionModule(nn.Module):
-    def __init__(self,
-                 input_dim_feature_1,
-                 input_dim_feature_2,
-                 output_dim):
-        super(AttentionFusionModule, self).__init__()
+class Classifer(nn.Module):
+    def __init__(self, input_size, dropout_rate, num_classes):
+        super(Classifer, self).__init__()
+        self.dropout = nn.Dropout(dropout_rate)
+        self.fc = nn.Linear(input_size, input_size*2)
+        self.output = nn.Linear(input_size*2, num_classes)
 
-        self.fc1 = nn.Sequential(
-            nn.Linear(input_dim_feature_1, output_dim),
-            nn.LayerNorm(output_dim),
-            nn.ReLU(),
-        )
-
-        self.fc2 = nn.Sequential(
-            nn.Linear(input_dim_feature_2, output_dim),
-            nn.LayerNorm(output_dim),
-            nn.ReLU(),
-        )
-
-        self.attention1 = nn.Sequential(
-            nn.Linear(output_dim, output_dim),
-            nn.Tanh(),
-            nn.Linear(output_dim, output_dim),
-            nn.Softmax(dim=1)
-        )
-
-        self.attention2 = nn.Sequential(
-            nn.Linear(output_dim, output_dim),
-            nn.Tanh(),
-            nn.Linear(output_dim, output_dim),
-            nn.Softmax(dim=1)
-        )
-
-    def forward(self, feature_1, feature_2):
-        out1 = self.fc1(feature_1)
-        out2 = self.fc2(feature_2)
-
-        attn_weights1 = self.attention1(out1)
-        attn_weights2 = self.attention2(out2)
-
-        fused = attn_weights1 * out1 + attn_weights2 * out2
-        return fused
+    def forward(self, x):
+        x = rearrange(x, 'b w h d -> b (w h) d')
+        x = x.mean(dim=1)
+        x = self.dropout(x)
+        x = self.fc(x)
+        x = nn.functional.gelu(x)
+        x = self.output(x)
+        return x
 
 class Fusion(pl.LightningModule):
     def __init__(self, d_model: int,
-                 mlp_ratio: int,
                  dropout: float,
                  num_classes: int,
-                 input_dim_feature_1: int,
-                 input_dim_feature_2: int,
                  ):
         super(Fusion, self).__init__()
-        self.attention_fusion = AttentionFusionModule(input_dim_feature_1,
-                                                      input_dim_feature_2,
-                                                      d_model)
-        # self.mlp = FeedForward(d_model, mlp_ratio, dropout)
-        self.mlp = nn.Sequential(
-            nn.Linear(d_model, d_model*2),
-            nn.LayerNorm(d_model * 2),
-            nn.SiLU(),
-        )
-        self.norm1 = nn.LayerNorm(d_model)
-        self.norm2 = nn.LayerNorm(d_model)
-        self.classifier = nn.Linear(d_model, num_classes)
+        self.fc = nn.Linear(d_model * 2, d_model)
+        self.sigmoid = nn.Sigmoid()
+
+        self.classifier = Classifer(d_model, dropout, num_classes)
 
     def forward(self, feature_1, feature_2):
-        feature_1 = rearrange(feature_1, 'b h w c -> b (h w) c')
-        feature_2 = rearrange(feature_2, 'b h w c -> b (h w) c')
+        out = torch.cat((feature_1, feature_2), dim=-1)
+        out = self.fc(out)
+        attn = self.sigmoid(out)
 
-        x = self.attention_fusion(feature_1, feature_2)
-        # x = fused_features + self.mlp(fused_features)
-        x = self.norm1(x)
-        x = self.mlp(x)
+        out = feature_1 * attn + feature_2 * (1 - attn)
 
-        x = x.mean(dim=1)
-        x = self.classifier(x)
-        return x
+        out = self.classifier(out)
+
+        return out
+
+
+if __name__ == '__main__':
+    fusion = Fusion(256, 0.2, 2)
+    feature_1 = torch.randn(2, 7, 7, 256)
+    feature_2 = torch.randn(2, 7, 7, 256)
+    output = fusion(feature_1, feature_2)
+    print(output.shape)
+    print(output)
