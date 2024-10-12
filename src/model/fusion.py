@@ -27,7 +27,7 @@ class Classifer(nn.Module):
         super(Classifer, self).__init__()
         self.dropout = nn.Dropout(dropout_rate)
         self.fc = nn.Linear(input_size, input_size*2)
-        self.bn = nn.BatchNorm1d(input_size*2)
+        self.bn = nn.LayerNorm(input_size*2)
         self.output = nn.Linear(input_size*2, num_classes)
 
     def forward(self, x):
