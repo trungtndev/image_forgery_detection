@@ -38,15 +38,15 @@ def train(config):
         val_batch_size=config.data.val_batch_size
     )
 
-    # wandb_logger = WandbLogger(name=config.wandb.name,
-    #                 project=config.wandb.project,
-    #                 log_model=config.wandb.log_model,
-    #                 config=dict(config),
-    #                 )
-    # wandb_logger.watch(model_module,
-    #              log="all",
-    #              log_freq=200   ,
-    #              )
+    wandb_logger = WandbLogger(name=config.wandb.name,
+                    project=config.wandb.project,
+                    log_model=config.wandb.log_model,
+                    config=dict(config),
+                    )
+    wandb_logger.watch(model_module,
+                 log="all",
+                 log_freq=200   ,
+                 )
 
     lasted_checkpoint_callback = pl.callbacks.ModelCheckpoint(
         dirpath="checkpoint",
@@ -66,13 +66,13 @@ def train(config):
     trainer = pl.Trainer(
         accelerator=config.trainer.accelerator,
         devices=config.trainer.devices,
-        # strategy=DDPStrategy(find_unused_parameters=True),
+        strategy=DDPStrategy(find_unused_parameters=True),
         check_val_every_n_epoch=config.trainer.check_val_every_n_epoch,
         max_epochs=config.trainer.max_epochs,
         deterministic=config.trainer.deterministic,
 
         callbacks=[lr_callback, checkpoint_callback, lasted_checkpoint_callback],
-        # logger=wandb_logger,
+        logger=wandb_logger,
 
         log_every_n_steps=10
     )
