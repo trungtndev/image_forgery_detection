@@ -50,17 +50,15 @@ class LitModel(pl.LightningModule):
         optimizer = torch.optim.AdamW(self.parameters(),
                                     lr=self.hparams.learning_rate,
                                     weight_decay=self.hparams.weight_decay)
-        lateau_scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+        step_scheduler = torch.optim.lr_scheduler.StepLR(
             optimizer,
-            'max',
-            factor=0.25,
-            patience=self.hparams.patience // self.trainer.check_val_every_n_epoch,
-        )
+            verbose=True,
+            step_size=10,  # Adjust the step size as needed
+            gamma=0.45)
         scheduler = {
-            "scheduler": lateau_scheduler,
-            "monitor": "val_acc",
+            "scheduler": step_scheduler,
             "interval": "epoch",
-            "frequency": self.trainer.check_val_every_n_epoch,
+            "frequency": 1,
             "strict": True,
         }
         return [optimizer], [scheduler]

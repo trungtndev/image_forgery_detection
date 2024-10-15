@@ -79,14 +79,14 @@ class _Transition(nn.Module):
         self.use_dropout = use_dropout
         self.dropout = nn.Dropout(p=0.2)
 
-        # self.cbam = CBAM(channels=n_out_channels, reduction_rate=6, kernel_size=7)
+        self.cbam = CBAM(channels=n_out_channels, reduction_rate=6, kernel_size=7)
 
     def forward(self, x):
         out = F.relu(self.bn1(self.conv1(x)), inplace=True)
         if self.use_dropout:
             out = self.dropout(out)
         out = F.avg_pool2d(out, 2, ceil_mode=True)
-        # out = self.cbam(out)
+        out = self.cbam(out)
         return out
 
 
