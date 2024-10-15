@@ -33,8 +33,8 @@ class Classifer(nn.Module):
         self.fc = nn.Linear(input_size, num_classes)
 
     def forward(self, x):
-        x = F.avg_pool2d(x, x.size()[2:]).view(x.size()[0], -1)
-        # x = self.pooling(x)
+        kernel_size = x.size()[2:]
+        x = F.avg_pool2d(x, kernel_size)
         x = self.flatten(x)
         x = self.fc(x)
         return x
