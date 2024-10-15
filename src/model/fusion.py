@@ -28,12 +28,13 @@ class ConvForward(nn.Module):
 class Classifer(nn.Module):
     def __init__(self, input_size, num_classes):
         super(Classifer, self).__init__()
-        self.pooling = nn.AdaptiveMaxPool2d(1)
+        # self.pooling = nn.AdaptiveMaxPool2d(1)
         self.flatten = nn.Flatten()
         self.fc = nn.Linear(input_size, num_classes)
 
     def forward(self, x):
-        x = self.pooling(x)
+        x = F.avg_pool2d(x, x.size()[2:]).view(x.size()[0], -1)
+        # x = self.pooling(x)
         x = self.flatten(x)
         x = self.fc(x)
         return x
