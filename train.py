@@ -4,9 +4,12 @@ import argparse
 import pytorch_lightning as pl
 from pytorch_lightning.loggers import WandbLogger
 from pytorch_lightning.strategies import DDPStrategy
-
+import torch
 from src.lit_model import LitModel
 from src.datamodule.datamodule import ImageForgeryDatamMdule
+
+torch.use_deterministic_algorithms(True, warn_only=True)
+
 
 def train(config):
     pl.seed_everything(config.seed_everything, workers=True)
