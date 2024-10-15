@@ -85,8 +85,8 @@ class _Transition(nn.Module):
         out = F.relu(self.bn1(self.conv1(x)), inplace=True)
         if self.use_dropout:
             out = self.dropout(out)
-        # out = F.avg_pool2d(out, 2, ceil_mode=True)
-        out = self.cbam(out)
+        out = F.avg_pool2d(out, 2, ceil_mode=True)
+        # out = self.cbam(out)
         return out
 
 
