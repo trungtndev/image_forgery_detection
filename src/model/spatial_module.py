@@ -35,14 +35,13 @@ class SwinV1Encoder(pl.LightningModule):
         self.swinv1.head = nn.Identity()
 
         self.feature_proj = nn.Conv2d(768, d_model, kernel_size=1)
-        self.norm = nn.LayerNorm(d_model)
+        self.bn = nn.BatchNorm2d(d_model)
 
     def forward(self, img):
         x = self.swinv1(img)
         x = rearrange(x, "b h w d-> b d h w")
         x = self.feature_proj(x)
-        x = rearrange(x, "b d h w -> b h w d")
-        x = self.norm(x)
+        x = self.bn(x)
         return x
 
 if __name__ == '__main__':
@@ -51,4 +50,3 @@ if __name__ == '__main__':
     out = model(x)
     print(sum(p.numel() for p in model.parameters() if p.requires_grad))
     print(out.shape)
-    print(out)

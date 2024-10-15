@@ -1,33 +1,7 @@
 import pytorch_lightning as pl
 import torch
-import torch.nn.functional as F
-from typing import Tuple
 from torchmetrics import Accuracy
-from torch.optim.lr_scheduler import _LRScheduler
-import math
-from einops import rearrange
-
-
-from .model.spatial_module import SwinV1Encoder
-from .model.fusion import Fusion
-from .model.densenet import Encoder
-
-class WarmupCosineAnnealingLR(_LRScheduler):
-    def __init__(self, optimizer, warmup_epochs, total_epochs, eta_min=0, last_epoch=-1):
-        self.warmup_epochs = warmup_epochs
-        self.total_epochs = total_epochs
-        self.eta_min = eta_min
-        super().__init__(optimizer, last_epoch)
-
-    def get_lr(self):
-        if self.last_epoch < self.warmup_epochs:
-            return [base_lr * (self.last_epoch + 1) / self.warmup_epochs for base_lr in self.base_lrs]
-        else:
-            return [self.eta_min + (base_lr - self.eta_min)
-                    * 0.5
-                    * (1 + math.cos(math.pi * (self.last_epoch - self.warmup_epochs)
-                                    / (self.total_epochs - self.warmup_epochs)))
-                    for base_lr in self.base_lrs]
+from .model.model import Model
 
 
 class LitModel(pl.LightningModule):
@@ -41,8 +15,8 @@ class LitModel(pl.LightningModule):
                  attn_drop_rate: float,
                  drop_path_rate: float,
 
-                growth_rate: int,
-                num_layers: int,
+                 growth_rate: int,
+                 num_layers: int,
 
                  # training
                  learning_rate: float,
@@ -50,25 +24,18 @@ class LitModel(pl.LightningModule):
                  patience: int,
                  ):
         super().__init__()
-        self.spatial = SwinV1Encoder(
+        self.model = Model(
+            num_classes=num_classes,
             d_model=d_model,
+
             requires_grad=requires_grad,
             drop_rate=drop_rate,
             proj_drop_rate=proj_drop_rate,
             attn_drop_rate=attn_drop_rate,
-            drop_path_rate=drop_path_rate
-        )
+            drop_path_rate=drop_path_rate,
 
-        self.frequency = Encoder(
-            d_model=d_model,
-            num_layers=num_layers,
             growth_rate=growth_rate,
-        )
-
-        self.fusion = Fusion(
-            d_model=d_model,
-            num_classes=num_classes,
-            dropout=drop_rate,
+            num_layers=num_layers,
         )
 
         self.train_accuracy = Accuracy(task='multiclass', num_classes=2)
@@ -77,17 +44,12 @@ class LitModel(pl.LightningModule):
         self.save_hyperparameters()
 
     def forward(self, spa, fre):
-        x_1 = self.spatial(spa)
-        x_2 = self.frequency(fre)
-
-        x = self.fusion(x_1, x_2)
-        return x
+        return self.model(spa, fre)
 
     def configure_optimizers(self):
-        optimizer = torch.optim.SGD(self.parameters(),
-                                     lr=self.hparams.learning_rate,
-                                     weight_decay=self.hparams.weight_decay)
-        # scheduler_warmup = WarmupCosineAnnealingLR(optimizer, warmup_epochs=5, total_epochs=50)
+        optimizer = torch.optim.AdamW(self.parameters(),
+                                    lr=self.hparams.learning_rate,
+                                    weight_decay=self.hparams.weight_decay)
         lateau_scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
             optimizer,
             'max',
@@ -152,3 +114,15 @@ class LitModel(pl.LightningModule):
     def compute_loss(self, outputs, labels):
         criterion = torch.nn.CrossEntropyLoss()
         return criterion(outputs, labels)
+
+
+if __name__ == '__main__':
+    model = LitModel(2,
+                     512,
+                     True,
+                     0.1, 0.1, 0.1, 0.1,
+                     32, 4,
+                     1e-3, 1e-4, 3)
+    spa = torch.randn(1, 3, 224, 224)
+    fre = torch.randn(1, 3, 224, 224)
+    out = model(spa, fre)

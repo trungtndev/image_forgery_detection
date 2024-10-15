@@ -1,16 +1,15 @@
 import math
-from typing import Tuple
-
 import pytorch_lightning as pl
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from einops.einops import rearrange
-from torch import FloatTensor, LongTensor
 from torch_dct import dct_2d
+from .cbam import CBAM
+
 
 def log_magnitude(f_shift):
     return torch.log(1 + torch.abs(f_shift))
+
 
 class ImageToFrequency(nn.Module):
     def __init__(self):
@@ -23,70 +22,6 @@ class ImageToFrequency(nn.Module):
         x = log_magnitude(x)
         return x
 
-
-
-class ChannelAttention(nn.Module):
-    def __init__(self, channels, reduction_rate=16):
-        super(ChannelAttention, self).__init__()
-        self.squeeze = nn.ModuleList([
-            nn.AdaptiveAvgPool2d(1),
-            nn.AdaptiveMaxPool2d(1)
-        ])
-        self.excitation = nn.Sequential(
-            nn.Conv2d(in_channels=channels,
-                      out_channels=channels // reduction_rate,
-                      kernel_size=1),
-            nn.ReLU(),
-            nn.Conv2d(in_channels=channels // reduction_rate,
-                      out_channels=channels,
-                      kernel_size=1)
-        )
-        self.sigmoid = nn.Sigmoid()
-
-    def forward(self, x):
-        # perform squeeze with independent Pooling
-        avg_feat = self.squeeze[0](x)
-        max_feat = self.squeeze[1](x)
-        # perform excitation with the same excitation sub-net
-        avg_out = self.excitation(avg_feat)
-        max_out = self.excitation(max_feat)
-        # attention
-        attention = self.sigmoid(avg_out + max_out)
-        return attention * x
-
-class SpatialAttention(nn.Module):
-    def __init__(self, kernel_size=7):
-        super(SpatialAttention, self).__init__()
-        self.conv = nn.Conv2d(
-            in_channels=2,
-            out_channels=1,
-            kernel_size=kernel_size,
-            padding=kernel_size // 2
-        )
-        self.sigmoid = nn.Sigmoid()
-
-    def forward(self, x):
-        # mean on spatial dim
-        avg_feat    = torch.mean(x, dim=1, keepdim=True)
-        # max on spatial dim
-        max_feat, _ = torch.max(x, dim=1, keepdim=True)
-        feat = torch.cat([avg_feat, max_feat], dim=1)
-        out_feat = self.conv(feat)
-        attention = self.sigmoid(out_feat)
-        return attention * x
-
-class CBAM(nn.Module):
-    def __init__(self, channels, reduction_rate=16, kernel_size=7):
-        super(CBAM, self).__init__()
-        self.channel_attention = ChannelAttention(channels,
-                                                  reduction_rate)
-        self.spatial_attention = SpatialAttention(kernel_size)
-
-    def forward(self, x):
-        out = self.channel_attention(x)
-        out = self.spatial_attention(out)
-
-        return out
 
 # DenseNet-B
 class _Bottleneck(nn.Module):
@@ -102,11 +37,14 @@ class _Bottleneck(nn.Module):
         self.use_dropout = use_dropout
         self.dropout = nn.Dropout(p=0.2)
 
+        # self.cbam = CBAM(channels=growth_rate, reduction_rate=2, kernel_size=7)
+
     def forward(self, x):
         out = F.relu(self.bn1(self.conv1(x)), inplace=True)
         if self.use_dropout:
             out = self.dropout(out)
         out = F.relu(self.bn2(self.conv2(out)), inplace=True)
+        # out = self.cbam(out)
         if self.use_dropout:
             out = self.dropout(out)
         out = torch.cat((x, out), 1)
@@ -121,13 +59,11 @@ class _SingleLayer(nn.Module):
         self.conv1 = nn.Conv2d(
             n_channels, growth_rate, kernel_size=3, padding=1, bias=False
         )
-        self.cbam = CBAM(channels=growth_rate, reduction_rate=16, kernel_size=7)
         self.use_dropout = use_dropout
         self.dropout = nn.Dropout(p=0.2)
 
     def forward(self, x):
         out = self.conv1(F.relu(x, inplace=True))
-        out = self.cbam(out)
         if self.use_dropout:
             out = self.dropout(out)
         out = torch.cat((x, out), 1)
@@ -143,22 +79,25 @@ class _Transition(nn.Module):
         self.use_dropout = use_dropout
         self.dropout = nn.Dropout(p=0.2)
 
+        self.cbam = CBAM(channels=n_out_channels, reduction_rate=6, kernel_size=7)
+
     def forward(self, x):
         out = F.relu(self.bn1(self.conv1(x)), inplace=True)
         if self.use_dropout:
             out = self.dropout(out)
         out = F.avg_pool2d(out, 2, ceil_mode=True)
+        out = self.cbam(out)
         return out
 
 
 class DenseNet(nn.Module):
     def __init__(
-        self,
-        growth_rate: int,
-        num_layers: int,
-        reduction: float = 0.5,
-        bottleneck: bool = True,
-        use_dropout: bool = True,
+            self,
+            growth_rate: int,
+            num_layers: int,
+            reduction: float = 0.5,
+            bottleneck: bool = True,
+            use_dropout: bool = True,
     ):
         super(DenseNet, self).__init__()
         n_dense_blocks = num_layers
@@ -197,6 +136,14 @@ class DenseNet(nn.Module):
 
         self.out_channels = n_channels + n_dense_blocks * growth_rate
         self.post_norm = nn.BatchNorm2d(self.out_channels)
+        self._initialize_weights()
+
+    def _initialize_weights(self):
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d) or isinstance(m, nn.Linear):
+                torch.nn.init.xavier_uniform_(m.weight)
+                if m.bias is not None:
+                    torch.nn.init.constant_(m.bias, 0)
 
     @staticmethod
     def _make_dense(n_channels, growth_rate, n_dense_blocks, bottleneck, use_dropout):
@@ -231,29 +178,23 @@ class Encoder(pl.LightningModule):
         self.img2fre = ImageToFrequency()
 
         self.model = DenseNet(growth_rate=growth_rate, num_layers=num_layers)
+        self.bn = nn.BatchNorm2d(self.model.out_channels)
 
         self.feature_proj = nn.Conv2d(self.model.out_channels, d_model, kernel_size=1)
-
-
-        self.norm = nn.LayerNorm(d_model)
+        self.bn1 = nn.BatchNorm2d(d_model)
 
     def forward(self, img):
-
-        # extract feature
+        img = self.img2fre(img)
         feature = self.model(img)
+        feature = self.bn(feature)
         feature = self.feature_proj(feature)
-
-        # proj
-        feature = rearrange(feature, "b d h w -> b h w d")
-
-        feature = self.norm(feature)
-
+        feature = self.bn1(feature)
         return feature
 
 
 if __name__ == '__main__':
-    x = torch.randn(1, 1, 224, 224)
-    model = Encoder(d_model=256, growth_rate=24, num_layers=14)
+    x = torch.randn(1, 3, 224, 224)
+    model = Encoder(d_model=256, growth_rate=48, num_layers=12)
     out = model(x)
     print(sum(p.numel() for p in model.parameters() if p.requires_grad))
     print(out.shape)
