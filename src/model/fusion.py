@@ -28,7 +28,7 @@ class ConvForward(nn.Module):
 class Classifer(nn.Module):
     def __init__(self, input_size, num_classes):
         super(Classifer, self).__init__()
-        self.pooling = nn.AdaptiveMaxPool2d((1, 1))
+        self.pooling = nn.AdaptiveMaxPool2d(1)
         self.fc = nn.Linear(input_size, num_classes)
 
     def forward(self, x):
