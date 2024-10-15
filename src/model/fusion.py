@@ -53,7 +53,14 @@ class Classifer(nn.Module):
             nn.Linear(input_size, input_size//2),
             nn.LayerNorm(input_size//2),
             nn.SiLU(),
-            nn.Linear(input_size//2, num_classes)
+            nn.Dropout(dropout_rate),
+
+            nn.LayerNorm(input_size//2),
+            nn.Linear(input_size//2, input_size // 4),
+            nn.LayerNorm(input_size // 4),
+            nn.SiLU(),
+
+            nn.Linear(input_size//4, num_classes)
         )
 
     def forward(self, x):
