@@ -46,15 +46,23 @@ class Classifer(nn.Module):
     def __init__(self, input_size, num_classes, dropout_rate=0.2):
         super(Classifer, self).__init__()
         self.flatten = nn.Flatten()
-        self.dff = FeedForward(input_size, dropout_rate)
-        self.fc = nn.Linear(input_size, num_classes)
+        # self.dff = FeedForward(input_size, dropout_rate)
+        # self.fc = nn.Linear(input_size, num_classes)
+        self.out = nn.Sequential(
+            nn.LayerNorm(input_size),
+            nn.Linear(input_size, input_size//2),
+            nn.LayerNorm(input_size//2),
+            nn.SiLU(),
+            nn.Linear(input_size//2, num_classes)
+        )
 
     def forward(self, x):
         kernel_size = x.size()[2:]
         x = F.avg_pool2d(x, kernel_size)
         x = self.flatten(x)
-        x = x + self.dff(x)
-        x = self.fc(x)
+        # x = x + self.dff(x)
+        # x = self.fc(x)
+        x = self.out(x)
         return x
 
 
