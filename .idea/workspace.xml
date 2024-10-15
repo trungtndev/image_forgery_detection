@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="553fd17e-c948-49ea-b1b5-d41d259d976a" name="Changes" comment="add">
-      <change beforePath="$PROJECT_DIR$/test.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/test.ipynb" afterDir="false" />
-    </list>
+    <list default="true" id="553fd17e-c948-49ea-b1b5-d41d259d976a" name="Changes" comment="add" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -145,14 +143,7 @@
       <workItem from="1728791275674" duration="521000" />
       <workItem from="1728887992918" duration="10000" />
       <workItem from="1728996178962" duration="11082000" />
-    </task>
-    <task id="LOCAL-00010" summary="add">
-      <option name="closed" value="true" />
-      <created>1728384837721</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1728384837721</updated>
+      <workItem from="1729007652207" duration="388000" />
     </task>
     <task id="LOCAL-00011" summary="add">
       <option name="closed" value="true" />
@@ -538,7 +529,15 @@
       <option name="project" value="LOCAL" />
       <updated>1729006979806</updated>
     </task>
-    <option name="localTasksCounter" value="59" />
+    <task id="LOCAL-00059" summary="add">
+      <option name="closed" value="true" />
+      <created>1729008023761</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1729008023761</updated>
+    </task>
+    <option name="localTasksCounter" value="60" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

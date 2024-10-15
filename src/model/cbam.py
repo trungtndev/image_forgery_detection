@@ -33,22 +33,26 @@ class ChannelAttention(nn.Module):
 class SpatialAttention(nn.Module):
     def __init__(self, kernel_size=7):
         super(SpatialAttention, self).__init__()
+
+        self.bn1 = nn.BatchNorm2d(2)
         self.conv = nn.Conv2d(
             in_channels=2,
             out_channels=1,
             kernel_size=kernel_size,
-            padding=kernel_size // 2
+            padding=kernel_size // 2,
+            bias=False
         )
+        self.bn2 = nn.BatchNorm2d(1)
         self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):
-        # mean on spatial dim
         avg_feat    = torch.mean(x, dim=1, keepdim=True)
-        # max on spatial dim
         max_feat, _ = torch.max(x, dim=1, keepdim=True)
         feat = torch.cat([avg_feat, max_feat], dim=1)
-        out_feat = self.conv(feat)
-        attention = self.sigmoid(out_feat)
+        feat = self.bn1(feat)
+        feat = self.conv(feat)
+        feat = self.bn2(feat)
+        attention = self.sigmoid(feat)
         return attention * x
 
 class CBAM(nn.Module):
