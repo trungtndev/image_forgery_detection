@@ -8,7 +8,6 @@ import torch
 from src.lit_model import LitModel
 from src.datamodule.datamodule import ImageForgeryDatamMdule
 
-torch.use_deterministic_algorithms(True, warn_only=True)
 
 
 def train(config):
@@ -69,7 +68,7 @@ def train(config):
     trainer = pl.Trainer(
         accelerator=config.trainer.accelerator,
         devices=config.trainer.devices,
-        # strategy=DDPStrategy(find_unused_parameters=True),
+        strategy=DDPStrategy(find_unused_parameters=True),
         check_val_every_n_epoch=config.trainer.check_val_every_n_epoch,
         max_epochs=config.trainer.max_epochs,
         deterministic=config.trainer.deterministic,
