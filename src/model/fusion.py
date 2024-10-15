@@ -13,7 +13,7 @@ class ConvForward(nn.Module):
         self.conv1 = nn.Conv2d(d_model, d_model * 2, kernel_size=1)
         self.bn = nn.BatchNorm2d(d_model * 2)
         self.drop = nn.Dropout(dropout_rate)
-        self.ge = nn.GELU()
+        self.ge = nn.SiLU()
         self.conv2 = nn.Conv2d(d_model * 2, d_model, kernel_size=1)
 
     def forward(self, x):
@@ -30,7 +30,7 @@ class FeedForward(nn.Module):
         self.fc1 = nn.Linear(d_model, d_model * 2)
         self.bn = nn.LayerNorm(d_model * 2)
         self.drop = nn.Dropout(dropout_rate)
-        self.ge = nn.GELU()
+        self.ge = nn.SiLU()
         self.fc2 = nn.Linear(d_model * 2, d_model)
 
     def forward(self, x):
