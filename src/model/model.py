@@ -59,6 +59,6 @@ if __name__ == "__main__":
                   attn_drop_rate=0.1, drop_path_rate=0.1,
                   growth_rate=48,
                   num_layers=8)
-    print(model)
+    print(model(spa, fre).shape)
 
     print(sum(p.numel() for p in model.frequency.parameters() if p.requires_grad))

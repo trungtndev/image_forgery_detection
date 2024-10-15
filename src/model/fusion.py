@@ -29,11 +29,12 @@ class Classifer(nn.Module):
     def __init__(self, input_size, num_classes):
         super(Classifer, self).__init__()
         self.pooling = nn.AdaptiveMaxPool2d(1)
+        self.flatten = nn.Flatten()
         self.fc = nn.Linear(input_size, num_classes)
 
     def forward(self, x):
         x = self.pooling(x)
-        x = rearrange(x, 'b c h w -> b (c h w)')
+        x = self.flatten(x)
         x = self.fc(x)
         return x
 
