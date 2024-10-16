@@ -72,21 +72,24 @@ class _SingleLayer(nn.Module):
 
 # transition layer
 class _Transition(nn.Module):
-    def __init__(self, n_channels: int, n_out_channels: int, use_dropout: bool):
+    def __init__(self, n_channels: int, n_out_channels: int, use_dropout: bool, use_cbam: bool = False):
         super(_Transition, self).__init__()
         self.bn1 = nn.BatchNorm2d(n_out_channels)
         self.conv1 = nn.Conv2d(n_channels, n_out_channels, kernel_size=1, bias=False)
         self.use_dropout = use_dropout
         self.dropout = nn.Dropout(p=0.2)
 
-        self.cbam = CBAM(channels=n_out_channels, reduction_rate=4, kernel_size=7)
+        self.use_cbam = use_cbam
+        if use_cbam:
+            self.cbam = CBAM(channels=n_out_channels, reduction_rate=4, kernel_size=7)
 
     def forward(self, x):
         out = F.relu(self.bn1(self.conv1(x)), inplace=True)
         if self.use_dropout:
             out = self.dropout(out)
         out = F.avg_pool2d(out, 2, ceil_mode=True)
-        out = self.cbam(out)
+        if self.use_cbam:
+            out = self.cbam(out)
         return out
 
 
