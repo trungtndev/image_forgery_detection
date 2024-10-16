@@ -29,8 +29,8 @@ class FeedForward(nn.Module):
         super(FeedForward, self).__init__()
         self.fc1 = nn.Linear(d_model, d_model * 2)
         self.bn = nn.LayerNorm(d_model * 2)
+        self.ge = nn.GELU()
         self.drop = nn.Dropout(dropout_rate)
-        self.ge = nn.SiLU()
         self.fc2 = nn.Linear(d_model * 2, d_model)
 
     def forward(self, x):
@@ -43,33 +43,33 @@ class FeedForward(nn.Module):
 
 
 class Classifer(nn.Module):
-    def __init__(self, input_size, num_classes, dropout_rate=0.2):
+    def __init__(self, input_size, num_classes, dropout_rate):
         super(Classifer, self).__init__()
         self.flatten = nn.Flatten()
-        # self.dff = FeedForward(input_size, dropout_rate)
-        # self.fc = nn.Linear(input_size, num_classes)
-        self.out = nn.Sequential(
-            nn.LayerNorm(input_size),
-            nn.Linear(input_size, input_size//2),
-            nn.LayerNorm(input_size//2),
-            nn.SiLU(),
-            nn.Dropout(dropout_rate),
-
-            nn.LayerNorm(input_size//2),
-            nn.Linear(input_size//2, input_size // 4),
-            nn.LayerNorm(input_size // 4),
-            nn.SiLU(),
-
-            nn.Linear(input_size//4, num_classes)
-        )
+        self.dff = FeedForward(input_size, dropout_rate)
+        self.fc = nn.Linear(input_size, num_classes)
+        # self.out = nn.Sequential(
+        #     nn.LayerNorm(input_size),
+        #     nn.Linear(input_size, input_size//2),
+        #     nn.LayerNorm(input_size//2),
+        #     nn.SiLU(),
+        #     nn.Dropout(dropout_rate),
+        #
+        #     nn.LayerNorm(input_size//2),
+        #     nn.Linear(input_size//2, input_size // 4),
+        #     nn.LayerNorm(input_size // 4),
+        #     nn.SiLU(),
+        #
+        #     nn.Linear(input_size//4, num_classes)
+        # )
 
     def forward(self, x):
         kernel_size = x.size()[2:]
         x = F.avg_pool2d(x, kernel_size)
         x = self.flatten(x)
-        # x = x + self.dff(x)
-        # x = self.fc(x)
-        x = self.out(x)
+        x = x + self.dff(x)
+        x = self.fc(x)
+        # x = self.out(x)
         return x
 
 
@@ -94,7 +94,7 @@ class Head(nn.Module):
         super(Head, self).__init__()
         self.fusion = Fusion(d_model)
         self.conv = ConvForward(d_model, dropout_rate)
-        self.classifier = Classifer(d_model, num_classes)
+        self.classifier = Classifer(d_model, num_classes, dropout_rate)
 
     def forward(self, x1, x2):
         x = self.fusion(x1, x2)
