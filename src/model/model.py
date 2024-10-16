@@ -61,4 +61,4 @@ if __name__ == "__main__":
                   num_layers=8)
     print(model(spa, fre).shape)
     print(model)
-    print(sum(p.numel() for p in model.frequency.parameters() if p.requires_grad))
+    # print(sum(p.numel() for p in model.frequency.parameters() if p.requires_grad))

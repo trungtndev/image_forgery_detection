@@ -10,7 +10,7 @@ from torch import nn
 class ConvForward(nn.Module):
     def __init__(self, d_model: int, dropout_rate: float):
         super(ConvForward, self).__init__()
-        self.conv1 = nn.Conv2d(d_model, d_model * 2, kernel_size=1)
+        self.conv1 = nn.Conv2d(d_model, d_model * 2, kernel_size=1, bias=False)
         self.bn = nn.BatchNorm2d(d_model * 2)
         self.drop = nn.Dropout(dropout_rate)
         self.ge = nn.SiLU()
@@ -25,51 +25,46 @@ class ConvForward(nn.Module):
         return x
 
 class FeedForward(nn.Module):
-    def __init__(self, d_model: int, dropout_rate: float):
+    def __init__(self, d_model: int):
         super(FeedForward, self).__init__()
-        self.fc1 = nn.Linear(d_model, d_model * 2)
-        self.bn = nn.LayerNorm(d_model * 2)
-        self.ge = nn.GELU()
-        self.drop = nn.Dropout(dropout_rate)
-        self.fc2 = nn.Linear(d_model * 2, d_model)
+        self.fc1 = nn.Linear(d_model, d_model * 2, bias=False)
+        self.fc2 = nn.Linear(d_model, d_model * 2, bias=False)
+        self.fc3 = nn.Linear(d_model * 2, d_model, bias=False)
+
+        self.bn1 = nn.LayerNorm(d_model * 2)
+        self.bn2 = nn.LayerNorm(d_model * 2)
+        self.bn3 = nn.LayerNorm(d_model)
+
+        self.ac = nn.GELU()
 
     def forward(self, x):
-        x = self.fc1(x)
-        x = self.bn(x)
-        x = self.ge(x)
-        x = self.drop(x)
-        x = self.fc2(x)
-        return x
+        x_fc1 = self.fc1(x)
+        x_fc1 = self.bn1(x_fc1)
+
+        x_fc2 = self.fc2(x)
+        x_fc2 = self.bn2(x_fc2)
+
+        x = self.ac(x_fc1) * x_fc2
+        x = self.fc3(x)
+        return self.bn3(x)
 
 
 class Classifer(nn.Module):
     def __init__(self, input_size, num_classes, dropout_rate):
         super(Classifer, self).__init__()
         self.flatten = nn.Flatten()
-        self.dff = FeedForward(input_size, dropout_rate)
+        self.ffd = FeedForward(input_size)
+        self.act = nn.ReLU()
         self.fc = nn.Linear(input_size, num_classes)
-        # self.out = nn.Sequential(
-        #     nn.LayerNorm(input_size),
-        #     nn.Linear(input_size, input_size//2),
-        #     nn.LayerNorm(input_size//2),
-        #     nn.SiLU(),
-        #     nn.Dropout(dropout_rate),
-        #
-        #     nn.LayerNorm(input_size//2),
-        #     nn.Linear(input_size//2, input_size // 4),
-        #     nn.LayerNorm(input_size // 4),
-        #     nn.SiLU(),
-        #
-        #     nn.Linear(input_size//4, num_classes)
-        # )
 
     def forward(self, x):
         kernel_size = x.size()[2:]
         x = F.avg_pool2d(x, kernel_size)
         x = self.flatten(x)
-        x = x + self.dff(x)
+
+        x = x + self.ffd(x)
+        x = self.act(x)
         x = self.fc(x)
-        # x = self.out(x)
         return x
 
 
