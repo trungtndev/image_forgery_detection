@@ -75,6 +75,7 @@ def train(config):
 
         callbacks=[lr_callback, checkpoint_callback, lasted_checkpoint_callback],
         logger=wandb_logger,
+        gradient_clip_val=0.5,
 
         log_every_n_steps=10
     )
