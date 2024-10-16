@@ -35,7 +35,7 @@ class FeedForward(nn.Module):
         self.bn2 = nn.LayerNorm(d_model * 2)
         self.bn3 = nn.LayerNorm(d_model)
 
-        self.ac = nn.GELU()
+        self.ac = nn.SiLU()
 
     def forward(self, x):
         x_fc1 = self.fc1(x)
