@@ -60,5 +60,5 @@ if __name__ == "__main__":
                   growth_rate=48,
                   num_layers=8)
     print(model(spa, fre).shape)
-    # print(model)
-    print(sum(p.numel() for p in model.parameters() if p.requires_grad))
+    print(model.spatial)
+    print(sum(p.numel() for p in model.spatial.parameters() if p.requires_grad))
