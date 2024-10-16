@@ -28,7 +28,7 @@ class FeedForward(nn.Module):
     def __init__(self, d_model: int):
         super(FeedForward, self).__init__()
         self.bn = nn.LayerNorm(d_model)
-        self.fc1 = nn.Linear(d_model, d_model * 2, bias=False)
+        self.fc1 = nn.Linear(d_model, d_model * 2, bias=True)
         self.relu = nn.ReLU()
         self.fc2 = nn.Linear(d_model * 2, d_model, bias=True)
 
