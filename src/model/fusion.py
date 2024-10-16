@@ -88,12 +88,12 @@ class Head(nn.Module):
     def __init__(self, d_model: int, num_classes: int, dropout_rate: float):
         super(Head, self).__init__()
         self.fusion = Fusion(d_model)
-        self.conv = ConvForward(d_model, dropout_rate)
+        # self.conv = ConvForward(d_model, dropout_rate)
         self.classifier = Classifer(d_model, num_classes, dropout_rate)
 
     def forward(self, x1, x2):
         x = self.fusion(x1, x2)
-        x = x + self.conv(x)
+        # x = x + self.conv(x)
         return self.classifier(x)
 
 
