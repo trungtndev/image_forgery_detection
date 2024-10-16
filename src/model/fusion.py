@@ -58,8 +58,8 @@ class Classifer(pl.LightningModule):
         self.fc = nn.Linear(input_size, num_classes)
 
     def forward(self, x):
-        # kernel_size = x.size()[2:]
-        x = F.adaptive_max_pool2d(x, 1)
+        kernel_size = x.size()[2:]
+        x = F.max_pool2d(x, kernel_size)
         x = self.flatten(x)
 
         x = x + self.ffd(x)
