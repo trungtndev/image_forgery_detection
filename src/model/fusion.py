@@ -49,7 +49,7 @@ class FeedForward(nn.Module):
         return self.bn3(x)
 
 
-class Classifer(nn.Module):
+class Classifer(pl.LightningModule):
     def __init__(self, input_size, num_classes, dropout_rate):
         super(Classifer, self).__init__()
         self.flatten = nn.Flatten()
