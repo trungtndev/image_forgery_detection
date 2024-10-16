@@ -27,14 +27,14 @@ class ConvForward(nn.Module):
 class FeedForward(nn.Module):
     def __init__(self, d_model: int):
         super(FeedForward, self).__init__()
+        self.bn = nn.LayerNorm(d_model)
         self.fc1 = nn.Linear(d_model, d_model * 2, bias=False)
-        self.bn = nn.LayerNorm(d_model * 2)
         self.relu = nn.ReLU()
         self.fc2 = nn.Linear(d_model * 2, d_model, bias=True)
 
     def forward(self, x):
-        x = self.fc1(x)
         x = self.bn(x)
+        x = self.fc1(x)
         x = self.relu(x)
         x = self.fc2(x)
         return x
@@ -45,6 +45,7 @@ class Classifer(pl.LightningModule):
         super(Classifer, self).__init__()
         self.flatten = nn.Flatten()
         self.ffd = FeedForward(input_size)
+        self.bn = nn.LayerNorm(input_size)
         self.act = nn.ReLU()
         self.fc = nn.Linear(input_size, num_classes)
 
@@ -54,6 +55,7 @@ class Classifer(pl.LightningModule):
         x = self.flatten(x)
 
         x = x + self.ffd(x)
+        x = self.bn(x)
         x = self.act(x)
         x = self.fc(x)
         return x
