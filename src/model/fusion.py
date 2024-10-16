@@ -59,7 +59,7 @@ class Classifer(nn.Module):
 
     def forward(self, x):
         kernel_size = x.size()[2:]
-        x = F.avg_pool2d(x, kernel_size)
+        x = F.adaptive_avg_pool2d(x, 1)
         x = self.flatten(x)
 
         x = x + self.ffd(x)
