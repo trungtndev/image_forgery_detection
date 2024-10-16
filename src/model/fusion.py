@@ -58,7 +58,7 @@ class Classifer(pl.LightningModule):
         self.fc = nn.Linear(input_size, num_classes)
 
     def forward(self, x):
-        kernel_size = x.size()[2:]
+        # kernel_size = x.size()[2:]
         x = F.adaptive_avg_pool2d(x, 1)
         x = self.flatten(x)
 
