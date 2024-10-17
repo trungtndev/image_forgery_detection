@@ -40,7 +40,7 @@ class SwinV1Encoder(pl.LightningModule):
         for param in self.swinv1.layers[2].parameters():
             param.requires_grad = False
 
-        for param in self.swinv1.parameters():
+        for param in self.swinv1.layers[3].parameters():
             param.requires_grad = requires_grad
 
         self.out = nn.Sequential(
