@@ -1,4 +1,3 @@
-
 from sconf import Config
 import argparse
 import pytorch_lightning as pl
@@ -7,6 +6,7 @@ from pytorch_lightning.strategies import DDPStrategy
 import torch
 from src.lit_model import LitModel
 from src.datamodule.datamodule import ImageForgeryDatamMdule
+
 
 def train(config):
     pl.seed_everything(config.seed_everything, workers=True)
@@ -25,18 +25,19 @@ def train(config):
     )
 
     wandb_logger = WandbLogger(name=config.wandb.name,
-                    project=config.wandb.project,
-                    log_model=config.wandb.log_model,
-                    config=dict(config),
-                    )
+                               project=config.wandb.project,
+                               log_model=config.wandb.log_model,
+                               config=dict(config),
+                               )
     wandb_logger.watch(model_module,
-                 log="all",
-                 log_freq=50,
-                 )
+                       log="all",
+                       log_freq=50,
+                       )
 
     lasted_checkpoint_callback = pl.callbacks.ModelCheckpoint(
         dirpath="checkpoint",
         save_last=True,
+        save_weights_only=False
     )
 
     lr_callback = pl.callbacks.LearningRateMonitor(
@@ -46,7 +47,8 @@ def train(config):
         save_top_k=config.trainer.callbacks[1].init_args.save_top_k,
         monitor=config.trainer.callbacks[1].init_args.monitor,
         mode=config.trainer.callbacks[1].init_args.mode,
-        filename=config.trainer.callbacks[1].init_args.filename)
+        filename=config.trainer.callbacks[1].init_args.filename,
+        save_weights_only=False)
 
     trainer = pl.Trainer(
         accelerator=config.trainer.accelerator,
@@ -58,13 +60,8 @@ def train(config):
 
         callbacks=[lr_callback, checkpoint_callback, lasted_checkpoint_callback],
         logger=wandb_logger,
-        gradient_clip_val=0.5,
-
-        log_every_n_steps=10,
-        resume_from_checkpoint=path
     )
-    trainer.fit(model_module, data_module)
-
+    trainer.fit(model_module, data_module, ckpt_path=path)
 
 
 if __name__ == "__main__":
