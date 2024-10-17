@@ -66,7 +66,6 @@ class LitModel(pl.LightningModule):
         outputs = self(spa, fre)
 
         loss = self.compute_loss(outputs, labels)
-        self.train_accuracy(outputs.softmax(dim=-1), labels)
 
         self.log('train_loss', loss,
                  prog_bar=True,
