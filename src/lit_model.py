@@ -45,9 +45,14 @@ class LitModel(pl.LightningModule):
         return self.model(spa, fre)
 
     def configure_optimizers(self):
-        optimizer = torch.optim.AdamW(self.parameters(),
-                                    lr=self.hparams.learning_rate,
-                                    weight_decay=self.hparams.weight_decay)
+        optimizer = torch.optim.AdamW([
+            {'params': self.model.spatial.swinv1.parameters(), 'lr': self.hparams.learning_rate*0.1},
+            {'params': self.model.spatial.out.parameters(), 'lr': self.hparams.learning_rate*0.5},
+
+            {'params': self.model.frequency.parameters(), 'lr': self.hparams.learning_rate},
+            {'params': self.model.head.parameters(), 'lr': self.hparams.learning_rate},
+        ],
+            weight_decay=self.hparams.weight_decay)
         step_scheduler = torch.optim.lr_scheduler.StepLR(
             optimizer,
             verbose=True,
