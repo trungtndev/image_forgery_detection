@@ -29,22 +29,22 @@ class SwinV1Encoder(pl.LightningModule):
             drop_path_rate=drop_path_rate,
         )
         self.swinv1.load_state_dict(swinv1_state_dict)
-        self.parameters()
-        for param in self.swinv1.patch_embed.parameters():
-            param.requires_grad = False
-        for param in self.swinv1.layers[0].parameters():
-            param.requires_grad = False
-        for param in self.swinv1.layers[1].parameters():
-            param.requires_grad = False
-        for param in self.swinv1.layers[2].parameters():
-            param.requires_grad = False
+        self.swinv1.head = nn.Identity()
 
-        for param in self.swinv1.layers[3].parameters():
+        # for param in self.swinv1.patch_embed.parameters():
+        #     param.requires_grad = False
+        # for param in self.swinv1.layers[0].parameters():
+        #     param.requires_grad = False
+        # for param in self.swinv1.layers[1].parameters():
+        #     param.requires_grad = False
+        # for param in self.swinv1.layers[2].parameters():
+        #     param.requires_grad = False
+
+        for param in self.swinv1.parameters():
             param.requires_grad = requires_grad
 
 
 
-        self.swinv1.head = nn.Identity()
 
         self.swin_feature_proj = nn.Linear(768, d_model, bias=False)
         self.bn = nn.LayerNorm(d_model)
