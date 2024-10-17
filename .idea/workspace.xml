@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="553fd17e-c948-49ea-b1b5-d41d259d976a" name="Changes" comment="add">
-      <change beforePath="$PROJECT_DIR$/src/model/spatial_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/spatial_module.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/test.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,11 +79,11 @@
       <recent name="D:\image_forgery_detection\data\CASIA1\test" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\image_forgery_detection\checkpoint" />
       <recent name="D:\image_forgery_detection\data\CASIA1\val\real" />
       <recent name="D:\image_forgery_detection\data\CASIA1\val\fake" />
       <recent name="D:\image_forgery_detection\data\CASIA1\train\real" />
       <recent name="D:\image_forgery_detection\data\CASIA1\train\fake" />
-      <recent name="D:\image_forgery_detection\data\CASIA1\test\real" />
     </key>
   </component>
   <component name="RunManager">
@@ -160,15 +161,8 @@
       <workItem from="1729085448985" duration="788000" />
       <workItem from="1729087016847" duration="14000" />
       <workItem from="1729128014639" duration="148000" />
-      <workItem from="1729130300854" duration="511000" />
-    </task>
-    <task id="LOCAL-00041" summary="add">
-      <option name="closed" value="true" />
-      <created>1728733960991</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1728733960991</updated>
+      <workItem from="1729130300854" duration="664000" />
+      <workItem from="1729133847425" duration="450000" />
     </task>
     <task id="LOCAL-00042" summary="add">
       <option name="closed" value="true" />
@@ -554,7 +548,15 @@
       <option name="project" value="LOCAL" />
       <updated>1729130483049</updated>
     </task>
-    <option name="localTasksCounter" value="90" />
+    <task id="LOCAL-00090" summary="add">
+      <option name="closed" value="true" />
+      <created>1729130870802</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1729130870802</updated>
+    </task>
+    <option name="localTasksCounter" value="91" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
