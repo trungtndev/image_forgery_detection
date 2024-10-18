@@ -8,6 +8,17 @@ import torch
 from src.lit_model import LitModel
 from src.datamodule.datamodule import ImageForgeryDatamMdule
 
+import pytorch_lightning as pl
+
+class FreezeBackboneCallback(pl.Callback):
+    def __init__(self, unfreeze_at_epoch=10):
+        self.unfreeze_at_epoch = unfreeze_at_epoch
+
+    def on_epoch_start(self, trainer, pl_module):
+        if trainer.current_epoch == self.unfreeze_at_epoch:
+            for param in pl_module.model.spatial.swinv1.layers[3].parameters():
+                param.requires_grad = True
+            print(f"Backbone has been unfrozen at epoch {self.unfreeze_at_epoch}.")
 
 
 def train(config):
@@ -73,7 +84,7 @@ def train(config):
         max_epochs=config.trainer.max_epochs,
         deterministic=config.trainer.deterministic,
 
-        callbacks=[lr_callback, checkpoint_callback, lasted_checkpoint_callback],
+        callbacks=[lr_callback, checkpoint_callback, lasted_checkpoint_callback, FreezeBackboneCallback()],
         logger=wandb_logger,
         gradient_clip_val=0.7,
     )
