@@ -13,11 +13,11 @@ class FrequencyModule(pl.LightningModule):
 
                  ):
         super(FrequencyModule, self).__init__()
-        self.hy = Encoder(
+        self.fre = Encoder(
             d_model=d_model,
             growth_rate=growth_rate,
             num_layers=num_layers,
         )
 
     def forward(self, x) -> Any:
-        return self.hy(x)
+        return self.fre(x)

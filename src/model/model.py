@@ -49,8 +49,8 @@ class Model(pl.LightningModule):
         return x
 
 if __name__ == "__main__":
-    spa = torch.randn(1, 3, 224, 224)
-    fre = torch.randn(1, 3, 224, 224)
+    spa = torch.randn(2, 3, 224, 224)
+    fre = torch.randn(2, 3, 224, 224)
     model = Model(num_classes=2,
                   d_model=256,
                   requires_grad=True,

@@ -28,9 +28,9 @@ class FeedForward(nn.Module):
     def __init__(self, d_model: int):
         super(FeedForward, self).__init__()
         self.bn = nn.LayerNorm(d_model)
-        self.fc1 = nn.Linear(d_model, d_model * 2, bias=True)
+        self.fc1 = nn.Linear(d_model, d_model // 2, bias=True)
         self.relu = nn.ReLU()
-        self.fc2 = nn.Linear(d_model * 2, d_model, bias=True)
+        self.fc2 = nn.Linear(d_model // 2, d_model, bias=True)
 
     def forward(self, x):
         x = self.bn(x)
@@ -43,22 +43,22 @@ class FeedForward(nn.Module):
 class Classifer(pl.LightningModule):
     def __init__(self, input_size, num_classes, dropout_rate):
         super(Classifer, self).__init__()
+        self.downsample = nn.Conv2d(input_size, 16, kernel_size=1)
         self.flatten = nn.Flatten()
-        self.ffd = FeedForward(input_size)
-        self.bn = nn.LayerNorm(input_size)
+        self.ffd = FeedForward(784)
+        self.bn = nn.LayerNorm(784)
         self.act = nn.ReLU()
-        self.fc = nn.Linear(input_size, num_classes)
+        self.fc = nn.Linear(784, num_classes)
 
     def forward(self, x):
-        kernel_size = x.size()[2:]
-        x = F.max_pool2d(x, kernel_size)
-        x = self.flatten(x)
+        out = self.downsample(x)
+        out = self.flatten(out)
 
-        x = x + self.ffd(x)
-        x = self.bn(x)
-        x = self.act(x)
-        x = self.fc(x)
-        return x
+        out = out + self.ffd(out)
+        out = self.bn(out)
+        out = self.act(out)
+        out = self.fc(out)
+        return out
 
 
 class Fusion(nn.Module):
