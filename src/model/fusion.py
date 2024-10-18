@@ -42,15 +42,14 @@ class Classifer(pl.LightningModule):
     def __init__(self, input_size, num_classes, dropout_rate):
         super(Classifer, self).__init__()
         self.flatten = nn.Flatten()
-        self.ffd = FeedForward(input_size)
+        # self.ffd = FeedForward(input_size)
         self.act = nn.ReLU()
         self.fc = nn.Linear(input_size, num_classes)
 
     def forward(self, x):
         out = F.max_pool2d(x, kernel_size=x.size()[2:])
         out = self.flatten(out)
-
-        out = out + self.ffd(out)
+        # out = out + self.ffd(out)
         out = self.act(out)
         out = self.fc(out)
         return out
