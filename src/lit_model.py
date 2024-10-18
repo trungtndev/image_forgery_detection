@@ -56,7 +56,7 @@ class LitModel(pl.LightningModule):
         step_scheduler = torch.optim.lr_scheduler.StepLR(
             optimizer,
             verbose=True,
-            step_size=8,
+            step_size=self.hparams.patience,
             gamma=0.45)
         scheduler = {
             "scheduler": step_scheduler,
