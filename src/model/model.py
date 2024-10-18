@@ -42,7 +42,7 @@ class Model(pl.LightningModule):
             dropout_rate=drop_rate
         )
 
-    def forward(self, spa):
+    def forward(self, spa, fre):
         x_1 = self.spatial(spa)
         # x_2 = self.frequency(fre)
         x = self.head(x_1)

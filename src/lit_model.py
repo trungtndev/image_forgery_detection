@@ -41,8 +41,8 @@ class LitModel(pl.LightningModule):
         self.val_accuracy = Accuracy(task='multiclass', num_classes=2)
         self.save_hyperparameters()
 
-    def forward(self, spa):
-        return self.model(spa)
+    def forward(self, spa, fre):
+        return self.model(spa, fre)
 
     def configure_optimizers(self):
         optimizer = torch.optim.Adam([
@@ -70,8 +70,8 @@ class LitModel(pl.LightningModule):
         return [optimizer], [scheduler]
 
     def training_step(self, batch, batch_idx):
-        fre, labels = batch
-        outputs = self(fre)
+        spa, fre, labels = batch
+        outputs = self(spa, fre)
         self.train_accuracy(outputs.softmax(dim=-1), labels)
 
         loss = self.compute_loss(outputs, labels)
@@ -87,8 +87,8 @@ class LitModel(pl.LightningModule):
         return loss
 
     def validation_step(self, batch, batch_idx):
-        fre, labels = batch
-        outputs = self(fre)
+        spa, fre, labels = batch
+        outputs = self(spa, fre)
 
         loss = self.compute_loss(outputs, labels)
         self.val_accuracy(outputs.softmax(dim=-1), labels)
@@ -103,8 +103,8 @@ class LitModel(pl.LightningModule):
                  sync_dist=True)
 
     def test_step(self, batch, batch_idx):
-        fre, labels = batch
-        outputs = self(fre)
+        spa, fre, labels = batch
+        outputs = self(spa, fre)
 
         loss = self.compute_loss(outputs, labels)
         self.val_accuracy(outputs.softmax(dim=-1), labels)

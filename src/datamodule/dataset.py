@@ -30,9 +30,9 @@ class ImageForgeryDataset(Dataset):
             tr.Resize((224, 224)),
             tr.ToTensor(),
             multiply_by_255,
-            # torch.fft.fft2,
-            # torch.fft.fftshift,
-            # log_magnitude,
+            torch.fft.fft2,
+            torch.fft.fftshift,
+            log_magnitude,
         ])
 
     def __len__(self):
@@ -40,4 +40,4 @@ class ImageForgeryDataset(Dataset):
 
     def __getitem__(self, idx):
         image, label = self.data[idx]
-        return self.transform1(image), label
+        return self.transform1(image), self.transform2(image), label
