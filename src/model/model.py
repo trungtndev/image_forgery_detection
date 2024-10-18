@@ -21,14 +21,14 @@ class Model(pl.LightningModule):
         super().__init__()
         self.num_classes = num_classes
 
-        self.spatial = SwinV1Encoder(
-            d_model=d_model,
-            requires_grad=requires_grad,
-            drop_rate=drop_rate,
-            proj_drop_rate=proj_drop_rate,
-            attn_drop_rate=attn_drop_rate,
-            drop_path_rate=drop_path_rate
-        )
+        # self.spatial = SwinV1Encoder(
+        #     d_model=d_model,
+        #     requires_grad=requires_grad,
+        #     drop_rate=drop_rate,
+        #     proj_drop_rate=proj_drop_rate,
+        #     attn_drop_rate=attn_drop_rate,
+        #     drop_path_rate=drop_path_rate
+        # )
 
         self.frequency = FrequencyModule(
             d_model=d_model,
@@ -42,10 +42,10 @@ class Model(pl.LightningModule):
             dropout_rate=drop_rate
         )
 
-    def forward(self, spa, fre):
-        x_1 = self.spatial(spa)
+    def forward(self, fre):
+        # x_1 = self.spatial(spa)
         x_2 = self.frequency(fre)
-        x = self.head(x_1, x_2)
+        x = self.head(x_2)
         return x
 
 if __name__ == "__main__":
@@ -59,6 +59,5 @@ if __name__ == "__main__":
                   attn_drop_rate=0.1, drop_path_rate=0.1,
                   growth_rate=48,
                   num_layers=8)
-    print(model(spa, fre).shape)
-    print(model.spatial)
-    print(sum(p.numel() for p in model.spatial.parameters() if p.requires_grad))
+    print(model(fre).shape)
+    print(sum(p.numel() for p in model.parameters() if p.requires_grad))

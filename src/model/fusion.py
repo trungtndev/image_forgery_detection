@@ -82,8 +82,7 @@ class Head(nn.Module):
         super(Head, self).__init__()
         self.classifier = Classifer(d_model, num_classes, dropout_rate)
 
-    def forward(self, x1, x2):
-        x = x1 + x2
+    def forward(self, x):
         return self.classifier(x)
 
 

@@ -41,13 +41,13 @@ class LitModel(pl.LightningModule):
         self.val_accuracy = Accuracy(task='multiclass', num_classes=2)
         self.save_hyperparameters()
 
-    def forward(self, spa, fre):
-        return self.model(spa, fre)
+    def forward(self, fre):
+        return self.model(fre)
 
     def configure_optimizers(self):
         optimizer = torch.optim.AdamW([
-            {'params': self.model.spatial.swinv1.parameters(), 'lr': self.hparams.learning_rate*0.2},
-            {'params': self.model.spatial.out.parameters(), 'lr': self.hparams.learning_rate},
+            # {'params': self.model.spatial.swinv1.parameters(), 'lr': self.hparams.learning_rate*0.2},
+            # {'params': self.model.spatial.out.parameters(), 'lr': self.hparams.learning_rate},
 
             {'params': self.model.frequency.parameters(), 'lr': self.hparams.learning_rate},
             {'params': self.model.head.parameters(), 'lr': self.hparams.learning_rate},
@@ -122,4 +122,4 @@ if __name__ == '__main__':
                      1e-3, 1e-4, 3)
     spa = torch.randn(1, 3, 224, 224)
     fre = torch.randn(1, 3, 224, 224)
-    out = model(spa, fre)
+    out = model(fre)
