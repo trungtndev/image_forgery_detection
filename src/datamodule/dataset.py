@@ -6,7 +6,7 @@ from torch_dct import dct_2d
 
 
 def multiply_by_255(x):
-    return x * 255
+    return x * 255.0
 
 
 def log_magnitude(f_shift):
@@ -29,7 +29,7 @@ class ImageForgeryDataset(Dataset):
         self.transform2 = tr.Compose([
             tr.Resize((224, 224)),
             tr.ToTensor(),
-            # multiply_by_255,
+            multiply_by_255,
             # dct_2d,
             # torch.fft.fftshift,
             # log_magnitude,
