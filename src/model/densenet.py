@@ -167,16 +167,12 @@ class Encoder(pl.LightningModule):
         super().__init__()
 
         self.model = DenseNet(growth_rate=growth_rate, num_layers=num_layers)
-        self.bn = nn.BatchNorm2d(self.model.out_channels)
 
         self.feature_proj = nn.Conv2d(self.model.out_channels, d_model, kernel_size=1)
-        self.bn1 = nn.BatchNorm2d(d_model)
 
     def forward(self, img):
         feature = self.model(img)
-        feature = self.bn(feature)
         feature = self.feature_proj(feature)
-        feature = self.bn1(feature)
         return feature
 
 

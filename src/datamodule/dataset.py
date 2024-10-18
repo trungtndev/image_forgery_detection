@@ -30,7 +30,7 @@ class ImageForgeryDataset(Dataset):
             tr.Resize((224, 224)),
             tr.ToTensor(),
             multiply_by_255,
-            # dct_2d,
+            # torch.fft.fft2,
             # torch.fft.fftshift,
             # log_magnitude,
         ])
