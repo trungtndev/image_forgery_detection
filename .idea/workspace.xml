@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="553fd17e-c948-49ea-b1b5-d41d259d976a" name="Changes" comment="add">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lit_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/lit_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/frequency_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/frequency_module.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/fusion.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/fusion.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/model.py" afterDir="false" />
-    </list>
+    <list default="true" id="553fd17e-c948-49ea-b1b5-d41d259d976a" name="Changes" comment="add" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -171,23 +165,7 @@
       <workItem from="1729148122128" duration="20000" />
       <workItem from="1729230506510" duration="4501000" />
       <workItem from="1729237150195" duration="1059000" />
-      <workItem from="1729239380954" duration="688000" />
-    </task>
-    <task id="LOCAL-00053" summary="add">
-      <option name="closed" value="true" />
-      <created>1729004599618</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1729004599618</updated>
-    </task>
-    <task id="LOCAL-00054" summary="add">
-      <option name="closed" value="true" />
-      <created>1729004618894</created>
-      <option name="number" value="00054" />
-      <option name="presentableId" value="LOCAL-00054" />
-      <option name="project" value="LOCAL" />
-      <updated>1729004618894</updated>
+      <workItem from="1729239380954" duration="1673000" />
     </task>
     <task id="LOCAL-00055" summary="add">
       <option name="closed" value="true" />
@@ -565,7 +543,23 @@
       <option name="project" value="LOCAL" />
       <updated>1729237837671</updated>
     </task>
-    <option name="localTasksCounter" value="102" />
+    <task id="LOCAL-00102" summary="add">
+      <option name="closed" value="true" />
+      <created>1729240136947</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1729240136947</updated>
+    </task>
+    <task id="LOCAL-00103" summary="add">
+      <option name="closed" value="true" />
+      <created>1729241068153</created>
+      <option name="number" value="00103" />
+      <option name="presentableId" value="LOCAL-00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1729241068153</updated>
+    </task>
+    <option name="localTasksCounter" value="104" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

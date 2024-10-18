@@ -20,6 +20,7 @@ class ImageForgeryDataset(Dataset):
         self.transform2 = tr.Compose([
             tr.Resize((224, 224)),
             tr.ToTensor(),
+            multiply_by_255,
         ])
 
     def __len__(self):
