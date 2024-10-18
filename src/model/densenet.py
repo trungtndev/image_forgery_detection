@@ -68,7 +68,7 @@ class _Transition(nn.Module):
 
         self.use_cbam = use_cbam
         if use_cbam:
-            self.cbam = CBAM(channels=n_out_channels, reduction_rate=4, kernel_size=7)
+            self.cbam = CBAM(channels=n_out_channels, reduction_rate=2, kernel_size=7)
 
     def forward(self, x):
         out = F.relu(self.bn1(self.conv1(x)), inplace=True)
