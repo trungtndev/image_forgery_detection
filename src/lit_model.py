@@ -57,7 +57,7 @@ class LitModel(pl.LightningModule):
             optimizer,
             verbose=True,
             step_size=self.hparams.patience,
-            gamma=0.45)
+            gamma=0.5)
         scheduler = {
             "scheduler": step_scheduler,
             "interval": "epoch",
