@@ -43,7 +43,7 @@ class Classifer(pl.LightningModule):
         super(Classifer, self).__init__()
         self.pool = nn.MaxPool2d((7, 7), stride=(1, 1))
         self.flatten = nn.Flatten()
-        # self.ffd = FeedForward(input_size)
+        self.ffd = FeedForward(input_size)
         self.act = nn.ReLU()
         self.fc = nn.Linear(input_size, num_classes)
 
