@@ -20,7 +20,7 @@ class SwinV1Encoder(pl.LightningModule):
                  ):
         super().__init__()
         swinv1_state_dict = (timm.create_model('swin_tiny_patch4_window7_224',
-                                               pretrained=True)
+                                               pretrained=False)
                              .state_dict())
         self.swinv1 = SwinTransformer(
             drop_rate=drop_rate,
@@ -32,13 +32,13 @@ class SwinV1Encoder(pl.LightningModule):
         self.swinv1.head = nn.Identity()
 
         for param in self.swinv1.patch_embed.parameters():
-            param.requires_grad = False
+            param.requires_grad = requires_grad
         for param in self.swinv1.layers[0].parameters():
-            param.requires_grad = False
+            param.requires_grad = requires_grad
         for param in self.swinv1.layers[1].parameters():
-            param.requires_grad = False
+            param.requires_grad = requires_grad
         for param in self.swinv1.layers[2].parameters():
-            param.requires_grad = False
+            param.requires_grad = requires_grad
 
         for param in self.swinv1.layers[3].parameters():
             param.requires_grad = requires_grad
