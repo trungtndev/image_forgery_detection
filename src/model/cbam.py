@@ -21,8 +21,8 @@ class ChannelAttention(nn.Module):
 
     def forward(self, x):
         # perform squeeze with independent Pooling
-        avg_feat = F.avg_pool2d(x, x.size()[2:])
-        max_feat = F.max_pool2d(x, x.size()[2:])
+        avg_feat = F.avg_pool2d(x, x.size()[2:], ceil_mode=True)
+        max_feat = F.max_pool2d(x, x.size()[2:], ceil_mode=True)
         # perform excitation with the same excitation sub-net
         avg_out = self.excitation(avg_feat)
         max_out = self.excitation(max_feat)
