@@ -43,7 +43,7 @@ class SwinV1Encoder(pl.LightningModule):
             param.requires_grad = requires_grad
 
         self.out = nn.Sequential(
-            nn.Linear(768, d_model, bias=False),
+            nn.Linear(768, d_model, bias=True),
             nn.ReLU(),
             nn.LayerNorm(d_model),
         )

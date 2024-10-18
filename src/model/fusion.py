@@ -60,13 +60,11 @@ class Fusion(nn.Module):
     def __init__(self, d_model: int):
         super(Fusion, self).__init__()
         self.conv = nn.Conv2d(d_model * 2, d_model, kernel_size=1)
-        self.bn = nn.BatchNorm2d(d_model)
         self.sigmoid = nn.Sigmoid()
 
     def forward(self, feature_1, feature_2):
         out = torch.cat((feature_1, feature_2), dim=1)
         out = self.conv(out)
-        out = self.bn(out)
         attn = self.sigmoid(out)
         out = feature_1 * attn + feature_2 * (1 - attn)
         return out
