@@ -43,15 +43,16 @@ class FeedForward(nn.Module):
 class Classifer(pl.LightningModule):
     def __init__(self, input_size, num_classes, dropout_rate):
         super(Classifer, self).__init__()
-        self.downsample = nn.Conv2d(input_size, 16, kernel_size=1)
+        # self.downsample = nn.Conv2d(input_size, 16, kernel_size=1)
         self.flatten = nn.Flatten()
-        self.ffd = FeedForward(784)
-        self.bn = nn.LayerNorm(784)
+        self.ffd = FeedForward(input_size)
+        self.bn = nn.LayerNorm(input_size)
         self.act = nn.ReLU()
-        self.fc = nn.Linear(784, num_classes)
+        self.fc = nn.Linear(input_size, num_classes)
 
     def forward(self, x):
-        out = self.downsample(x)
+        out = F.max_pool2d(x, kernel_size=x.size()[2:])
+        # out = self.downsample(x)
         out = self.flatten(out)
 
         out = out + self.ffd(out)
