@@ -1,8 +1,17 @@
 from torch.utils.data.dataset import Dataset
 from torchvision import transforms as tr
+import torch
+from torch_dct import dct_2d
+
+
 
 def multiply_by_255(x):
     return x * 255
+
+
+def log_magnitude(f_shift):
+    return torch.log(1 + torch.abs(f_shift))
+
 
 class ImageForgeryDataset(Dataset):
     def __init__(self, data) -> None:
@@ -20,7 +29,10 @@ class ImageForgeryDataset(Dataset):
         self.transform2 = tr.Compose([
             tr.Resize((224, 224)),
             tr.ToTensor(),
-            multiply_by_255,
+            # multiply_by_255,
+            # dct_2d,
+            # torch.fft.fftshift,
+            # log_magnitude,
         ])
 
     def __len__(self):

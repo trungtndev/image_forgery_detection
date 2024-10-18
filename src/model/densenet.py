@@ -7,18 +7,7 @@ from torch_dct import dct_2d
 from .cbam import CBAM
 
 
-def log_magnitude(f_shift):
-    return torch.log(1 + torch.abs(f_shift))
 
-
-class ImageToFrequency(nn.Module):
-    def __init__(self):
-        super(ImageToFrequency, self).__init__()
-    def forward(self, x):
-        x = dct_2d(x, norm='ortho')
-        x = torch.fft.fftshift(x)
-        # x = log_magnitude(x)
-        return x
 
 
 # DenseNet-B
@@ -176,7 +165,6 @@ class DenseNet(nn.Module):
 class Encoder(pl.LightningModule):
     def __init__(self, d_model: int, growth_rate: int, num_layers: int):
         super().__init__()
-        self.img2fre = ImageToFrequency()
 
         self.model = DenseNet(growth_rate=growth_rate, num_layers=num_layers)
         self.bn = nn.BatchNorm2d(self.model.out_channels)
@@ -185,7 +173,6 @@ class Encoder(pl.LightningModule):
         self.bn1 = nn.BatchNorm2d(d_model)
 
     def forward(self, img):
-        img = self.img2fre(img)
         feature = self.model(img)
         feature = self.bn(feature)
         feature = self.feature_proj(feature)
