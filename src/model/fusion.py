@@ -41,7 +41,7 @@ class FeedForward(nn.Module):
 class Classifer(pl.LightningModule):
     def __init__(self, input_size, num_classes, dropout_rate):
         super(Classifer, self).__init__()
-        self.pool = nn.MaxPool2d((7, 7))
+        self.pool = nn.MaxPool2d((7, 7), stride=(1, 1))
         self.flatten = nn.Flatten()
         # self.ffd = FeedForward(input_size)
         self.act = nn.ReLU()
@@ -50,7 +50,7 @@ class Classifer(pl.LightningModule):
     def forward(self, x):
         out = self.pool(x)
         out = self.flatten(out)
-        # out = out + self.ffd(out)
+        out = out + self.ffd(out)
         out = self.act(out)
         out = self.fc(out)
         return out
