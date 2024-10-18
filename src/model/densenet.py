@@ -14,12 +14,10 @@ def log_magnitude(f_shift):
 class ImageToFrequency(nn.Module):
     def __init__(self):
         super(ImageToFrequency, self).__init__()
-        self.dct = dct_2d
-
     def forward(self, x):
         x = dct_2d(x, norm='ortho')
         x = torch.fft.fftshift(x)
-        x = log_magnitude(x)
+        # x = log_magnitude(x)
         return x
 
 
