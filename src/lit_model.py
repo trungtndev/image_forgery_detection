@@ -46,7 +46,7 @@ class LitModel(pl.LightningModule):
 
     def configure_optimizers(self):
         optimizer = torch.optim.Adam([
-            {'params': self.model.spatial.swinv1.parameters(), 'lr': self.hparams.learning_rate * 0.2},
+            {'params': self.model.spatial.swinv1.parameters(), 'lr': self.hparams.learning_rate * 0.08},
             {'params': self.model.spatial.out.parameters(), 'lr': self.hparams.learning_rate},
 
             # {'params': self.model.frequency.parameters(), 'lr': self.hparams.learning_rate},
