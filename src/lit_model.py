@@ -67,8 +67,8 @@ class LitModel(pl.LightningModule):
         return [optimizer], [scheduler]
 
     def training_step(self, batch, batch_idx):
-        spa, fre, labels = batch
-        outputs = self(spa, fre)
+        fre, labels = batch
+        outputs = self(fre)
 
         loss = self.compute_loss(outputs, labels)
 
@@ -79,8 +79,8 @@ class LitModel(pl.LightningModule):
         return loss
 
     def validation_step(self, batch, batch_idx):
-        spa, fre, labels = batch
-        outputs = self(spa, fre)
+        fre, labels = batch
+        outputs = self(fre)
 
         loss = self.compute_loss(outputs, labels)
         self.val_accuracy(outputs.softmax(dim=-1), labels)
@@ -95,8 +95,8 @@ class LitModel(pl.LightningModule):
                  sync_dist=True)
 
     def test_step(self, batch, batch_idx):
-        spa, fre, labels = batch
-        outputs = self(spa, fre)
+        fre, labels = batch
+        outputs = self(fre)
 
         loss = self.compute_loss(outputs, labels)
         self.val_accuracy(outputs.softmax(dim=-1), labels)
