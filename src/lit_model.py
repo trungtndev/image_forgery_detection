@@ -46,24 +46,27 @@ class LitModel(pl.LightningModule):
 
     def configure_optimizers(self):
         optimizer = torch.optim.SGD([
-            {'params': self.model.spatial.swinv1.parameters(), 'lr': self.hparams.learning_rate*0.2},
+            {'params': self.model.spatial.swinv1.parameters(), 'lr': self.hparams.learning_rate * 0.2},
             {'params': self.model.spatial.out.parameters(), 'lr': self.hparams.learning_rate},
 
             # {'params': self.model.frequency.parameters(), 'lr': self.hparams.learning_rate},
             {'params': self.model.head.parameters(), 'lr': self.hparams.learning_rate},
         ],
             weight_decay=self.hparams.weight_decay)
+
         step_scheduler = torch.optim.lr_scheduler.StepLR(
             optimizer,
             verbose=True,
             step_size=self.hparams.patience,
             gamma=0.5)
+
         scheduler = {
             "scheduler": step_scheduler,
             "interval": "epoch",
             "frequency": 1,
             "strict": True,
         }
+
         return [optimizer], [scheduler]
 
     def training_step(self, batch, batch_idx):
