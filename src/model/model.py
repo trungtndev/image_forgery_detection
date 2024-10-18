@@ -21,20 +21,20 @@ class Model(pl.LightningModule):
         super().__init__()
         self.num_classes = num_classes
 
-        # self.spatial = SwinV1Encoder(
-        #     d_model=d_model,
-        #     requires_grad=requires_grad,
-        #     drop_rate=drop_rate,
-        #     proj_drop_rate=proj_drop_rate,
-        #     attn_drop_rate=attn_drop_rate,
-        #     drop_path_rate=drop_path_rate
-        # )
-
-        self.frequency = FrequencyModule(
+        self.spatial = SwinV1Encoder(
             d_model=d_model,
-            num_layers=num_layers,
-            growth_rate=growth_rate,
+            requires_grad=requires_grad,
+            drop_rate=drop_rate,
+            proj_drop_rate=proj_drop_rate,
+            attn_drop_rate=attn_drop_rate,
+            drop_path_rate=drop_path_rate
         )
+
+        # self.frequency = FrequencyModule(
+        #     d_model=d_model,
+        #     num_layers=num_layers,
+        #     growth_rate=growth_rate,
+        # )
 
         self.head = Head(
             d_model=d_model,
@@ -42,10 +42,10 @@ class Model(pl.LightningModule):
             dropout_rate=drop_rate
         )
 
-    def forward(self, fre):
-        # x_1 = self.spatial(spa)
-        x_2 = self.frequency(fre)
-        x = self.head(x_2)
+    def forward(self, spa):
+        x_1 = self.spatial(spa)
+        # x_2 = self.frequency(fre)
+        x = self.head(x_1)
         return x
 
 if __name__ == "__main__":

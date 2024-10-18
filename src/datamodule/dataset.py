@@ -40,4 +40,4 @@ class ImageForgeryDataset(Dataset):
 
     def __getitem__(self, idx):
         image, label = self.data[idx]
-        return self.transform2(image), label
+        return self.transform1(image), label

@@ -37,19 +37,19 @@ class LitModel(pl.LightningModule):
             growth_rate=growth_rate,
             num_layers=num_layers,
         )
-
+        self.train_accuracy = Accuracy(task='multiclass', num_classes=2)
         self.val_accuracy = Accuracy(task='multiclass', num_classes=2)
         self.save_hyperparameters()
 
-    def forward(self, fre):
-        return self.model(fre)
+    def forward(self, spa):
+        return self.model(spa)
 
     def configure_optimizers(self):
         optimizer = torch.optim.SGD([
-            # {'params': self.model.spatial.swinv1.parameters(), 'lr': self.hparams.learning_rate*0.2},
-            # {'params': self.model.spatial.out.parameters(), 'lr': self.hparams.learning_rate},
+            {'params': self.model.spatial.swinv1.parameters(), 'lr': self.hparams.learning_rate*0.2},
+            {'params': self.model.spatial.out.parameters(), 'lr': self.hparams.learning_rate},
 
-            {'params': self.model.frequency.parameters(), 'lr': self.hparams.learning_rate},
+            # {'params': self.model.frequency.parameters(), 'lr': self.hparams.learning_rate},
             {'params': self.model.head.parameters(), 'lr': self.hparams.learning_rate},
         ],
             weight_decay=self.hparams.weight_decay)
@@ -69,11 +69,15 @@ class LitModel(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         fre, labels = batch
         outputs = self(fre)
+        self.train_accuracy(outputs.softmax(dim=-1), labels)
 
         loss = self.compute_loss(outputs, labels)
 
         self.log('train_loss', loss,
                  prog_bar=True,
+                 sync_dist=True)
+        self.log('train_acc', self.train_accuracy,
+                 on_epoch=True,
                  sync_dist=True)
 
         return loss
