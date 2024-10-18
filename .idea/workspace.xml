@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="553fd17e-c948-49ea-b1b5-d41d259d976a" name="Changes" comment="add" />
+    <list default="true" id="553fd17e-c948-49ea-b1b5-d41d259d976a" name="Changes" comment="add">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -165,31 +167,7 @@
       <workItem from="1729148122128" duration="20000" />
       <workItem from="1729230506510" duration="4501000" />
       <workItem from="1729237150195" duration="1059000" />
-      <workItem from="1729239380954" duration="2893000" />
-    </task>
-    <task id="LOCAL-00060" summary="add">
-      <option name="closed" value="true" />
-      <created>1729009199024</created>
-      <option name="number" value="00060" />
-      <option name="presentableId" value="LOCAL-00060" />
-      <option name="project" value="LOCAL" />
-      <updated>1729009199024</updated>
-    </task>
-    <task id="LOCAL-00061" summary="add">
-      <option name="closed" value="true" />
-      <created>1729010069235</created>
-      <option name="number" value="00061" />
-      <option name="presentableId" value="LOCAL-00061" />
-      <option name="project" value="LOCAL" />
-      <updated>1729010069235</updated>
-    </task>
-    <task id="LOCAL-00062" summary="add">
-      <option name="closed" value="true" />
-      <created>1729010364303</created>
-      <option name="number" value="00062" />
-      <option name="presentableId" value="LOCAL-00062" />
-      <option name="project" value="LOCAL" />
-      <updated>1729010364303</updated>
+      <workItem from="1729239380954" duration="3668000" />
     </task>
     <task id="LOCAL-00063" summary="add">
       <option name="closed" value="true" />
@@ -559,7 +537,31 @@
       <option name="project" value="LOCAL" />
       <updated>1729242040322</updated>
     </task>
-    <option name="localTasksCounter" value="109" />
+    <task id="LOCAL-00109" summary="add">
+      <option name="closed" value="true" />
+      <created>1729242667982</created>
+      <option name="number" value="00109" />
+      <option name="presentableId" value="LOCAL-00109" />
+      <option name="project" value="LOCAL" />
+      <updated>1729242667982</updated>
+    </task>
+    <task id="LOCAL-00110" summary="add">
+      <option name="closed" value="true" />
+      <created>1729242684595</created>
+      <option name="number" value="00110" />
+      <option name="presentableId" value="LOCAL-00110" />
+      <option name="project" value="LOCAL" />
+      <updated>1729242684595</updated>
+    </task>
+    <task id="LOCAL-00111" summary="add">
+      <option name="closed" value="true" />
+      <created>1729242715789</created>
+      <option name="number" value="00111" />
+      <option name="presentableId" value="LOCAL-00111" />
+      <option name="project" value="LOCAL" />
+      <updated>1729242715789</updated>
+    </task>
+    <option name="localTasksCounter" value="112" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
