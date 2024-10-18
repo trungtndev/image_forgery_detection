@@ -20,7 +20,7 @@ class SwinV1Encoder(pl.LightningModule):
                  ):
         super().__init__()
         swinv1_state_dict = (timm.create_model('swin_tiny_patch4_window7_224',
-                                               pretrained=False)
+                                               pretrained=True)
                              .state_dict())
         self.swinv1 = SwinTransformer(
             drop_rate=drop_rate,
