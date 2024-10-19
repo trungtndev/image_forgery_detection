@@ -59,7 +59,7 @@ class _SingleLayer(nn.Module):
 
 # transition layer
 class _Transition(nn.Module):
-    def __init__(self, n_channels: int, n_out_channels: int, use_dropout: bool, use_cbam: bool = True):
+    def __init__(self, n_channels: int, n_out_channels: int, use_dropout: bool, use_cbam: bool = False):
         super(_Transition, self).__init__()
         self.bn1 = nn.BatchNorm2d(n_out_channels)
         self.conv1 = nn.Conv2d(n_channels, n_out_channels, kernel_size=1, bias=False)
