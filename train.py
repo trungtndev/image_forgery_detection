@@ -1,4 +1,4 @@
-
+from pywin.framework.mdi_pychecker import dirpath
 from sconf import Config
 import argparse
 import pytorch_lightning as pl
@@ -71,12 +71,14 @@ def train(config):
         logging_interval=config.trainer.callbacks[0].init_args.logging_interval)
 
     checkpoint_callback = pl.callbacks.ModelCheckpoint(
+        dirpath="lightning_logs",
         save_top_k=config.trainer.callbacks[1].init_args.save_top_k,
         monitor=config.trainer.callbacks[1].init_args.monitor,
         mode=config.trainer.callbacks[1].init_args.mode,
         filename=config.trainer.callbacks[1].init_args.filename)
 
     trainer = pl.Trainer(
+        default_root_dir='lightning_logs',
         accelerator=config.trainer.accelerator,
         devices=config.trainer.devices,
         strategy=DDPStrategy(find_unused_parameters=True),
@@ -86,7 +88,6 @@ def train(config):
 
         callbacks=[lr_callback, checkpoint_callback, lasted_checkpoint_callback,],
         logger=wandb_logger,
-        gradient_clip_val=0.7,
     )
     trainer.fit(model_module, data_module)
 
