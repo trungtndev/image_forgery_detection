@@ -87,6 +87,7 @@ def train(config):
         callbacks=[lr_callback, checkpoint_callback, lasted_checkpoint_callback,],
         logger=wandb_logger,
         gradient_clip_val=0.7,
+        precision=32,
     )
     trainer.fit(model_module, data_module)
 

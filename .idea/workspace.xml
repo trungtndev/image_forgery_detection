@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="553fd17e-c948-49ea-b1b5-d41d259d976a" name="Changes" comment="add">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/fusion.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/fusion.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/train.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -184,14 +186,12 @@
       <workItem from="1729333695745" duration="523000" />
       <workItem from="1729334879648" duration="1481000" />
       <workItem from="1729337110149" duration="23000" />
-    </task>
-    <task id="LOCAL-00100" summary="add">
-      <option name="closed" value="true" />
-      <created>1729237504333</created>
-      <option name="number" value="00100" />
-      <option name="presentableId" value="LOCAL-00100" />
-      <option name="project" value="LOCAL" />
-      <updated>1729237504333</updated>
+      <workItem from="1729337243188" duration="289000" />
+      <workItem from="1729338775886" duration="1000" />
+      <workItem from="1729341067120" duration="13000" />
+      <workItem from="1729341431307" duration="305000" />
+      <workItem from="1729343477815" duration="204000" />
+      <workItem from="1729347794155" duration="1707000" />
     </task>
     <task id="LOCAL-00101" summary="add">
       <option name="closed" value="true" />
@@ -577,7 +577,15 @@
       <option name="project" value="LOCAL" />
       <updated>1729334902030</updated>
     </task>
-    <option name="localTasksCounter" value="149" />
+    <task id="LOCAL-00149" summary="add">
+      <option name="closed" value="true" />
+      <created>1729337527549</created>
+      <option name="number" value="00149" />
+      <option name="presentableId" value="LOCAL-00149" />
+      <option name="project" value="LOCAL" />
+      <updated>1729337527549</updated>
+    </task>
+    <option name="localTasksCounter" value="150" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
