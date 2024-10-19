@@ -159,7 +159,7 @@ class Encoder(pl.LightningModule):
 
         self.model = DenseNet(growth_rate=growth_rate, num_layers=num_layers)
 
-        self.feature_proj = nn.Conv2d(self.model.out_channels, d_model, kernel_size=1)
+        self.feature_proj = nn.Conv2d(self.model.out_channels, d_model, kernel_size=1, bias=False)
         self.bn = nn.BatchNorm2d(d_model)
         self.act = nn.ReLU()
 
