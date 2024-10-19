@@ -78,7 +78,7 @@ class LitModel(pl.LightningModule):
 
         self.log('train_loss', loss,
                  prog_bar=True,
-                 on_step=True,
+                 on_step=False,
                  on_epoch=True,
                  sync_dist=True
                  )
@@ -99,7 +99,7 @@ class LitModel(pl.LightningModule):
 
         self.log('val_loss', loss,
                  prog_bar=True,
-                 on_step=True,
+                 on_step=False,
                  on_epoch=True,
                  sync_dist=True
                  )
