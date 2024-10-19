@@ -4,7 +4,9 @@ from PIL import Image, ImageFile
 import os
 
 from .dataset import ImageForgeryDataset
+
 ImageFile.LOAD_TRUNCATED_IMAGES = True
+
 
 def extract_data(folder_path: str, type_path: str):
     data = []
@@ -50,16 +52,19 @@ class ImageForgeryDatamMdule(pl.LightningDataModule):
         return DataLoader(self.train_dataset,
                           batch_size=self.train_batch_size,
                           num_workers=self.num_workers,
+                          pin_memory=True,
                           shuffle=True)
 
     def val_dataloader(self):
         return DataLoader(self.val_dataset,
                           batch_size=self.val_batch_size,
                           num_workers=self.num_workers,
+                          pin_memory=True,
                           shuffle=False)
 
     def test_dataloader(self):
         return DataLoader(self.test_dataset,
                           batch_size=self.val_batch_size,
                           num_workers=self.num_workers,
+                          pin_memory=True,
                           shuffle=False)
