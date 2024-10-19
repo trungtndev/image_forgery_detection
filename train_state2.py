@@ -11,11 +11,8 @@ from src.datamodule.datamodule import ImageForgeryDatamMdule
 def train(config):
     pl.seed_everything(config.seed_everything, workers=True)
     path = "checkpoint/epoch=5-step=3786.ckpt"
-    model_module = LitModel.load_from_checkpoint(path)
 
-    # unfreeze the state 3
-    for p in model_module.model.spatial.swinv1.layers[3].parameters():
-        p.requires_grad = True
+    model_module = LitModel.load_from_checkpoint(path)
 
     data_module = ImageForgeryDatamMdule(
         folder_path=config.data.folder_path,
@@ -24,44 +21,13 @@ def train(config):
         val_batch_size=config.data.val_batch_size
     )
 
-    wandb_logger = WandbLogger(name=config.wandb.name,
-                               project=config.wandb.project,
-                               log_model=config.wandb.log_model,
-                               config=dict(config),
-                               )
-    wandb_logger.watch(model_module,
-                       log="all",
-                       log_freq=50,
-                       )
-
-    lasted_checkpoint_callback = pl.callbacks.ModelCheckpoint(
-        dirpath="checkpoint",
-        save_last=True,
-        save_weights_only=False
-    )
-
-    lr_callback = pl.callbacks.LearningRateMonitor(
-        logging_interval=config.trainer.callbacks[0].init_args.logging_interval)
-
-    checkpoint_callback = pl.callbacks.ModelCheckpoint(
-        save_top_k=config.trainer.callbacks[1].init_args.save_top_k,
-        monitor=config.trainer.callbacks[1].init_args.monitor,
-        mode=config.trainer.callbacks[1].init_args.mode,
-        filename=config.trainer.callbacks[1].init_args.filename,
-        save_weights_only=False)
 
     trainer = pl.Trainer(
         accelerator=config.trainer.accelerator,
         devices=config.trainer.devices,
-        strategy=DDPStrategy(find_unused_parameters=True),
-        check_val_every_n_epoch=config.trainer.check_val_every_n_epoch,
-        max_epochs=config.trainer.max_epochs,
         deterministic=config.trainer.deterministic,
-
-        callbacks=[lr_callback, checkpoint_callback, lasted_checkpoint_callback],
-        logger=wandb_logger,
     )
-    trainer.fit(model_module, data_module, ckpt_path=path)
+    trainer.test(model_module, datamodule=data_module)
 
 
 if __name__ == "__main__":
