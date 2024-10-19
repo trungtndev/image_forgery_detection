@@ -85,7 +85,7 @@ class LitModel(pl.LightningModule):
                  prog_bar=True,
                  on_step=False,
                  on_epoch=True,
-                 sync_dist=True)
+                 )
 
         return loss
 
@@ -105,7 +105,7 @@ class LitModel(pl.LightningModule):
                  prog_bar=True,
                  on_step=False,
                  on_epoch=True,
-                 sync_dist=True)
+                 )
 
     def test_step(self, batch, batch_idx):
         spa, fre, labels = batch
