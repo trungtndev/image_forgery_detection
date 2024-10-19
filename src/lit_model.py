@@ -81,6 +81,7 @@ class LitModel(pl.LightningModule):
                  on_epoch=True,
                  sync_dist=True)
         self.log('train_acc', self.train_accuracy,
+                 prog_bar=True,
                  on_epoch=True,
                  sync_dist=True)
 
