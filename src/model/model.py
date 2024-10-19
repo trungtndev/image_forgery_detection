@@ -30,11 +30,11 @@ class Model(pl.LightningModule):
             drop_path_rate=drop_path_rate
         )
 
-        # self.frequency = FrequencyModule(
-        #     d_model=d_model,
-        #     num_layers=num_layers,
-        #     growth_rate=growth_rate,
-        # )
+        self.frequency = FrequencyModule(
+            d_model=d_model,
+            num_layers=num_layers,
+            growth_rate=growth_rate,
+        )
 
         self.head = Head(
             d_model=d_model,
@@ -44,8 +44,8 @@ class Model(pl.LightningModule):
 
     def forward(self, spa, fre):
         x_1 = self.spatial(spa)
-        # x_2 = self.frequency(fre)
-        x = self.head(x_1)
+        x_2 = self.frequency(fre)
+        x = self.head(x_1, x_2)
         return x
 
 if __name__ == "__main__":
@@ -59,5 +59,5 @@ if __name__ == "__main__":
                   attn_drop_rate=0.1, drop_path_rate=0.1,
                   growth_rate=48,
                   num_layers=8)
-    print(model(fre).shape)
+    print(model(spa, fre).shape)
     print(sum(p.numel() for p in model.parameters() if p.requires_grad))

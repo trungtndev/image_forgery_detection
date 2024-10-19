@@ -49,7 +49,7 @@ class LitModel(pl.LightningModule):
             {'params': self.model.spatial.swinv1.parameters(), 'lr': self.hparams.learning_rate * 0.1},
             {'params': self.model.spatial.out.parameters(), 'lr': self.hparams.learning_rate * 0.8},
 
-            # {'params': self.model.frequency.parameters(), 'lr': self.hparams.learning_rate},
+            {'params': self.model.frequency.parameters(), 'lr': self.hparams.learning_rate},
             {'params': self.model.head.parameters(), 'lr': self.hparams.learning_rate},
         ],
             weight_decay=self.hparams.weight_decay)

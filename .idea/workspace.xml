@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="553fd17e-c948-49ea-b1b5-d41d259d976a" name="Changes" comment="add">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/fusion.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/fusion.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/model.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,39 +182,7 @@
       <workItem from="1729271932666" duration="1311000" />
       <workItem from="1729321438767" duration="842000" />
       <workItem from="1729322523728" duration="3709000" />
-      <workItem from="1729328436713" duration="1769000" />
-    </task>
-    <task id="LOCAL-00093" summary="add">
-      <option name="closed" value="true" />
-      <created>1729139153362</created>
-      <option name="number" value="00093" />
-      <option name="presentableId" value="LOCAL-00093" />
-      <option name="project" value="LOCAL" />
-      <updated>1729139153363</updated>
-    </task>
-    <task id="LOCAL-00094" summary="add">
-      <option name="closed" value="true" />
-      <created>1729139594573</created>
-      <option name="number" value="00094" />
-      <option name="presentableId" value="LOCAL-00094" />
-      <option name="project" value="LOCAL" />
-      <updated>1729139594573</updated>
-    </task>
-    <task id="LOCAL-00095" summary="add">
-      <option name="closed" value="true" />
-      <created>1729140169411</created>
-      <option name="number" value="00095" />
-      <option name="presentableId" value="LOCAL-00095" />
-      <option name="project" value="LOCAL" />
-      <updated>1729140169411</updated>
-    </task>
-    <task id="LOCAL-00096" summary="add">
-      <option name="closed" value="true" />
-      <created>1729230674497</created>
-      <option name="number" value="00096" />
-      <option name="presentableId" value="LOCAL-00096" />
-      <option name="project" value="LOCAL" />
-      <updated>1729230674498</updated>
+      <workItem from="1729328436713" duration="3063000" />
     </task>
     <task id="LOCAL-00097" summary="add">
       <option name="closed" value="true" />
@@ -574,7 +544,39 @@
       <option name="project" value="LOCAL" />
       <updated>1729329337025</updated>
     </task>
-    <option name="localTasksCounter" value="142" />
+    <task id="LOCAL-00142" summary="add">
+      <option name="closed" value="true" />
+      <created>1729330401662</created>
+      <option name="number" value="00142" />
+      <option name="presentableId" value="LOCAL-00142" />
+      <option name="project" value="LOCAL" />
+      <updated>1729330401662</updated>
+    </task>
+    <task id="LOCAL-00143" summary="add">
+      <option name="closed" value="true" />
+      <created>1729330412595</created>
+      <option name="number" value="00143" />
+      <option name="presentableId" value="LOCAL-00143" />
+      <option name="project" value="LOCAL" />
+      <updated>1729330412595</updated>
+    </task>
+    <task id="LOCAL-00144" summary="add">
+      <option name="closed" value="true" />
+      <created>1729330493264</created>
+      <option name="number" value="00144" />
+      <option name="presentableId" value="LOCAL-00144" />
+      <option name="project" value="LOCAL" />
+      <updated>1729330493264</updated>
+    </task>
+    <task id="LOCAL-00145" summary="add">
+      <option name="closed" value="true" />
+      <created>1729330549568</created>
+      <option name="number" value="00145" />
+      <option name="presentableId" value="LOCAL-00145" />
+      <option name="project" value="LOCAL" />
+      <updated>1729330549568</updated>
+    </task>
+    <option name="localTasksCounter" value="146" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
