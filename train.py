@@ -65,6 +65,7 @@ def train(config):
         dirpath="checkpoint",
         save_last=True,
     )
+    unfreeze = FreezeBackboneCallback()
 
 
     lr_callback = pl.callbacks.LearningRateMonitor(
@@ -84,7 +85,7 @@ def train(config):
         max_epochs=config.trainer.max_epochs,
         deterministic=config.trainer.deterministic,
 
-        callbacks=[lr_callback, checkpoint_callback, lasted_checkpoint_callback, FreezeBackboneCallback()],
+        callbacks=[lr_callback, checkpoint_callback, lasted_checkpoint_callback, unfreeze],
         logger=wandb_logger,
         gradient_clip_val=0.7,
     )
