@@ -80,7 +80,8 @@ class LitModel(pl.LightningModule):
                  prog_bar=True,
                  on_step=False,
                  on_epoch=True,
-                 sync_dist=True)
+                 sync_dist=True
+                 )
         self.log('train_acc', self.train_accuracy,
                  prog_bar=True,
                  on_step=False,
@@ -100,7 +101,8 @@ class LitModel(pl.LightningModule):
                  prog_bar=True,
                  on_step=False,
                  on_epoch=True,
-                 sync_dist=True)
+                 sync_dist=True
+                 )
         self.log('val_acc', self.val_accuracy,
                  prog_bar=True,
                  on_step=False,
@@ -115,11 +117,14 @@ class LitModel(pl.LightningModule):
         self.val_accuracy(outputs.softmax(dim=-1), labels)
 
         self.log('test_loss', loss,
+                 on_step=False,
                  on_epoch=True,
-                 sync_dist=True)
+                 sync_dist=True
+                 )
         self.log('test_acc', self.val_accuracy,
+                 on_step=False,
                  on_epoch=True,
-                 sync_dist=True)
+                 )
 
     def compute_loss(self, outputs, labels):
         criterion = torch.nn.CrossEntropyLoss()
