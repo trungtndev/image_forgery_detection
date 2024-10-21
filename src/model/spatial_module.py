@@ -48,9 +48,6 @@ class SwinV1Encoder(pl.LightningModule):
             nn.LeakyReLU(),
         )
 
-
-
-
     def forward(self, img):
         x = self.swinv1(img)
         x = self.out(x)
