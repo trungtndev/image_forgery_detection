@@ -1,8 +1,6 @@
-from typing import Any
 import torch.nn as nn
 import torch
 import timm
-import numpy as np
 from timm.models.swin_transformer import SwinTransformer
 import pytorch_lightning as pl
 from einops.einops import rearrange

@@ -3,8 +3,6 @@ import pytorch_lightning as pl
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch_dct import dct_2d
-from .cbam import CBAM
 
 
 # DenseNet-B
@@ -169,9 +167,10 @@ class Encoder(pl.LightningModule):
 
 
 if __name__ == '__main__':
-    x = torch.randn(1, 3, 224, 224)
-    model = Encoder(d_model=256, growth_rate=48, num_layers=12)
-    out = model(x)
-    print(sum(p.numel() for p in model.parameters() if p.requires_grad))
-    print(out.shape)
-    print(out)
+    pass
+    # x = torch.randn(1, 3, 224, 224)
+    # model = Encoder(d_model=256, growth_rate=48, num_layers=12)
+    # out = model(x)
+    # print(sum(p.numel() for p in model.parameters() if p.requires_grad))
+    # print(out.shape)
+    # print(out)

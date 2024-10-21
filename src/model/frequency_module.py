@@ -1,6 +1,3 @@
-from typing import Any
-
-import torch
 from .densenet import Encoder
 import pytorch_lightning as pl
 
@@ -19,5 +16,5 @@ class FrequencyModule(pl.LightningModule):
             num_layers=num_layers,
         )
 
-    def forward(self, x) -> Any:
+    def forward(self, x):
         return self.fre(x)

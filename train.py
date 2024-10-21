@@ -80,7 +80,7 @@ def train(config):
         default_root_dir='lightning_logs',
         accelerator=config.trainer.accelerator,
         devices=config.trainer.devices,
-        # strategy=DDPStrategy(find_unused_parameters=True),
+        strategy=DDPStrategy(find_unused_parameters=True),
         check_val_every_n_epoch=config.trainer.check_val_every_n_epoch,
         max_epochs=config.trainer.max_epochs,
         deterministic=config.trainer.deterministic,

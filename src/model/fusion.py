@@ -1,9 +1,5 @@
-from typing import Any
-
 import pytorch_lightning as pl
 import torch
-from einops import rearrange
-import torch.nn.functional as F
 from torch import nn
 from .cbam import CBAM
 
