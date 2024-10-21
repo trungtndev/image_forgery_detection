@@ -63,7 +63,7 @@ class Fusion(nn.Module):
         self.conv1 = nn.Conv2d(d_model * 2, d_model, kernel_size=1)
         self.act = nn.ReLU()
         self.conv2 = nn.Conv2d(d_model, d_model, kernel_size=1)
-        self.sigmoid = nn.Sigmoid()
+        self.sigmoid = nn.Tanh()
 
         self.cbam = CBAM(channels=d_model, reduction_rate=2, kernel_size=3)
 
