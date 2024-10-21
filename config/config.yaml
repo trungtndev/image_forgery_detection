@@ -33,7 +33,7 @@ model:
   attn_drop_rate: 0.1
   drop_path_rate: 0.1
 
-  growth_rate: 48
+  growth_rate: 24
   num_layers: 8
 
   # training
