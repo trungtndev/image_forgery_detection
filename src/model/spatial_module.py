@@ -45,7 +45,7 @@ class SwinV1Encoder(pl.LightningModule):
         self.out = nn.Sequential(
             nn.Linear(768, d_model, bias=False),
             nn.LayerNorm(d_model),
-            nn.ReLU(),
+            nn.LeakyReLU(),
         )
 
 

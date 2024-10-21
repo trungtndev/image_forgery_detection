@@ -158,7 +158,7 @@ class Encoder(pl.LightningModule):
 
         self.feature_proj = nn.Conv2d(self.model.out_channels, d_model, kernel_size=1, bias=False)
         self.bn = nn.BatchNorm2d(d_model)
-        self.act = nn.ReLU()
+        self.act = nn.LeakyReLU()
 
     def forward(self, img):
         feature = self.model(img)
