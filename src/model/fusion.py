@@ -60,14 +60,18 @@ class Fusion(nn.Module):
     def __init__(self, d_model: int):
         super(Fusion, self).__init__()
         self.d_model = d_model
-        self.conv = nn.Conv2d(d_model * 2, d_model, kernel_size=1)
+        self.conv1 = nn.Conv2d(d_model * 2, d_model, kernel_size=1)
+        self.act = nn.ReLU()
+        self.conv2 = nn.Conv2d(d_model, d_model, kernel_size=1)
         self.sigmoid = nn.Sigmoid()
 
         self.cbam = CBAM(channels=d_model, reduction_rate=2, kernel_size=3)
 
     def forward(self, feature_1, feature_2):
         out = torch.cat((feature_1, feature_2), dim=1)
-        out = self.conv(out)
+        out = self.conv1(out)
+        out = self.act(out)
+        out = self.conv2(out)
         attn = self.sigmoid(out)
         out = feature_1 * attn + feature_2 * (1 - attn)
 
