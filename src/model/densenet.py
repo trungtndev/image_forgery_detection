@@ -87,8 +87,8 @@ class DenseNet(nn.Module):
         )
         n_channels += n_dense_blocks * growth_rate
         n_out_channels = int(math.floor(n_channels * reduction))
-        self.cbam1 = CBAM(channels=n_channels, reduction_rate=6, kernel_size=7)
-        # self.trans1 = _Transition(n_channels, n_out_channels, use_dropout)
+        # self.cbam1 = CBAM(channels=n_channels, reduction_rate=6, kernel_size=7)
+        self.trans1 = _Transition(n_channels, n_out_channels, use_dropout)
 
         n_channels = n_out_channels
         self.dense2 = self._make_dense(
