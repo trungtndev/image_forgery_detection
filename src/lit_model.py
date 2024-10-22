@@ -37,7 +37,7 @@ class LitModel(pl.LightningModule):
             growth_rate=growth_rate,
             num_layers=num_layers,
         )
-        self.train_accuracy = Accuracy(task='multiclass', num_classes=2)
+        # self.train_accuracy = Accuracy(task='multiclass', num_classes=2)
         self.val_accuracy = Accuracy(task='multiclass', num_classes=2)
         self.save_hyperparameters()
 
@@ -77,16 +77,15 @@ class LitModel(pl.LightningModule):
         loss = self.compute_loss(outputs, labels)
 
         self.log('train_loss', loss,
-                 prog_bar=True,
                  on_step=False,
                  on_epoch=True,
                  sync_dist=True
                  )
-        self.log('train_acc', self.train_accuracy,
-                 prog_bar=True,
-                 on_step=False,
-                 on_epoch=True,
-                 )
+        # self.log('train_acc', self.train_accuracy,
+        #          prog_bar=True,
+        #          on_step=False,
+        #          on_epoch=True,
+        #          )
 
         return loss
 

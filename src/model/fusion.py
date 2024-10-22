@@ -3,23 +3,6 @@ import torch
 from torch import nn
 from .cbam import CBAM
 
-class ConvForward(nn.Module):
-    def __init__(self, d_model: int, dropout_rate: float):
-        super(ConvForward, self).__init__()
-        self.conv1 = nn.Conv2d(d_model, d_model * 2, kernel_size=1, bias=False)
-        self.bn = nn.BatchNorm2d(d_model * 2)
-        self.drop = nn.Dropout(dropout_rate)
-        self.ge = nn.SiLU()
-        self.conv2 = nn.Conv2d(d_model * 2, d_model, kernel_size=1)
-
-    def forward(self, x):
-        x = self.conv1(x)
-        x = self.bn(x)
-        x = self.ge(x)
-        x = self.drop(x)
-        x = self.conv2(x)
-        return x
-
 class FeedForward(nn.Module):
     def __init__(self, d_model: int):
         super(FeedForward, self).__init__()
