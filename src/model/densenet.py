@@ -88,7 +88,7 @@ class DenseNet(nn.Module):
         n_channels += n_dense_blocks * growth_rate
         n_out_channels = int(math.floor(n_channels * reduction))
         self.cbam1 = CBAM(channels=n_channels, reduction_rate=6, kernel_size=7)
-        self.trans1 = _Transition(n_channels, n_out_channels, use_dropout)
+        # self.trans1 = _Transition(n_channels, n_out_channels, use_dropout)
 
         n_channels = n_out_channels
         self.dense2 = self._make_dense(
@@ -96,7 +96,7 @@ class DenseNet(nn.Module):
         )
         n_channels += n_dense_blocks * growth_rate
         n_out_channels = int(math.floor(n_channels * reduction))
-        self.cbam2 = CBAM(channels=n_channels, reduction_rate=6, kernel_size=7)
+        # self.cbam2 = CBAM(channels=n_channels, reduction_rate=6, kernel_size=7)
         self.trans2 = _Transition(n_channels, n_out_channels, use_dropout)
 
         n_channels = n_out_channels
@@ -106,13 +106,13 @@ class DenseNet(nn.Module):
 
         n_channels += n_dense_blocks * growth_rate
         n_out_channels = int(math.floor(n_channels * reduction))
-        self.cbam3 = CBAM(channels=n_channels, reduction_rate=6, kernel_size=3)
+        # self.cbam3 = CBAM(channels=n_channels, reduction_rate=6, kernel_size=3)
         self.trans3 = _Transition(n_channels, n_out_channels, use_dropout)
         n_channels = n_out_channels
         self.dense4 = self._make_dense(
             n_channels, growth_rate, n_dense_blocks, bottleneck, use_dropout
         )
-        self.cbam4 = CBAM(channels=n_channels + n_dense_blocks * growth_rate, reduction_rate=6, kernel_size=3)
+        # self.cbam4 = CBAM(channels=n_channels + n_dense_blocks * growth_rate, reduction_rate=6, kernel_size=3)
 
 
         self.out_channels = n_channels + n_dense_blocks * growth_rate
@@ -144,22 +144,22 @@ class DenseNet(nn.Module):
         out = F.max_pool2d(out, 2, ceil_mode=True)
         out = self.dense1(out)
 
-        out = self.cbam1(out)
+        # out = self.cbam1(out)
 
         out = self.trans1(out)
         out = self.dense2(out)
 
-        out = self.cbam2(out)
+        # out = self.cbam2(out)
 
         out = self.trans2(out)
         out = self.dense3(out)
 
-        out = self.cbam3(out)
+        # out = self.cbam3(out)
 
         out = self.trans3(out)
         out = self.dense4(out)
 
-        out = self.cbam4(out)
+        # out = self.cbam4(out)
 
         out = self.post_norm(out)
         return out
@@ -173,14 +173,14 @@ class Encoder(pl.LightningModule):
         self.feature_proj = nn.Conv2d(self.model.out_channels, d_model, kernel_size=1, bias=False)
         self.bn = nn.BatchNorm2d(d_model)
         self.act = nn.LeakyReLU()
-        self.cbam = CBAM(channels=d_model, reduction_rate=2, kernel_size=3)
+        # self.cbam = CBAM(channels=d_model, reduction_rate=2, kernel_size=3)
 
     def forward(self, img):
         feature = self.model(img)
         feature = self.feature_proj(feature)
         feature = self.bn(feature)
         feature = self.act(feature)
-        feature = self.cbam(feature)
+        # feature = self.cbam(feature)
         return feature
 
 

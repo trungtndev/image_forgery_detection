@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="553fd17e-c948-49ea-b1b5-d41d259d976a" name="Changes" comment="add">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/densenet.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/densenet.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -206,14 +205,11 @@
       <workItem from="1729518907655" duration="2544000" />
       <workItem from="1729522998453" duration="2694000" />
       <workItem from="1729527611807" duration="527000" />
-    </task>
-    <task id="LOCAL-00121" summary="add">
-      <option name="closed" value="true" />
-      <created>1729265232095</created>
-      <option name="number" value="00121" />
-      <option name="presentableId" value="LOCAL-00121" />
-      <option name="project" value="LOCAL" />
-      <updated>1729265232095</updated>
+      <workItem from="1729531044887" duration="159000" />
+      <workItem from="1729576412151" duration="23000" />
+      <workItem from="1729579665852" duration="1286000" />
+      <workItem from="1729585552325" duration="226000" />
+      <workItem from="1729612839146" duration="918000" />
     </task>
     <task id="LOCAL-00122" summary="add">
       <option name="closed" value="true" />
@@ -599,7 +595,15 @@
       <option name="project" value="LOCAL" />
       <updated>1729520878775</updated>
     </task>
-    <option name="localTasksCounter" value="170" />
+    <task id="LOCAL-00170" summary="add">
+      <option name="closed" value="true" />
+      <created>1729531189892</created>
+      <option name="number" value="00170" />
+      <option name="presentableId" value="LOCAL-00170" />
+      <option name="project" value="LOCAL" />
+      <updated>1729531189892</updated>
+    </task>
+    <option name="localTasksCounter" value="171" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
