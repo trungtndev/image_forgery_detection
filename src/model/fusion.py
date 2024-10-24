@@ -4,16 +4,21 @@ from torch import nn
 from .cbam import CBAM
 
 class FeedForward(nn.Module):
-    def __init__(self, d_model: int):
+    def __init__(self, d_model: int, dropout_rate: float):
         super(FeedForward, self).__init__()
         self.fc1 = nn.Linear(d_model, d_model * 2, bias=True)
-        self.relu = nn.ReLU()
-        self.fc2 = nn.Linear(d_model * 2, d_model, bias=True)
+        self.fc2 = nn.Linear(d_model, d_model * 2, bias=True)
+        self.fc3 = nn.Linear(d_model * 2, d_model, bias=True)
+        self.dropout1 = nn.Dropout(dropout_rate)
+        self.act = nn.SiLU()
+
 
     def forward(self, x):
-        x = self.fc1(x)
-        x = self.relu(x)
-        x = self.fc2(x)
+        x1 = self.fc1(x)
+        x2 = self.fc2(x)
+        x = self.act(x1) * x2
+        x = self.dropout1(x)
+        x = self.fc3(x)
         return x
 
 
@@ -22,7 +27,7 @@ class Classifer(pl.LightningModule):
         super(Classifer, self).__init__()
         self.pool = nn.MaxPool2d((7, 7), stride=(1, 1))
         self.flatten = nn.Flatten()
-        self.ffd = FeedForward(input_size)
+        self.ffd = FeedForward(input_size, dropout_rate)
         self.act = nn.ReLU()
         self.fc = nn.Linear(input_size, num_classes)
 
