@@ -72,7 +72,7 @@ class LitModel(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         spa, fre, labels = batch
         outputs = self(spa, fre)
-        self.train_accuracy(outputs.softmax(dim=-1), labels)
+        # self.train_accuracy(outputs.softmax(dim=-1), labels)
 
         loss = self.compute_loss(outputs, labels)
 
