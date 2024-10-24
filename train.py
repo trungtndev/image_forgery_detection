@@ -9,16 +9,6 @@ from src.datamodule.datamodule import ImageForgeryDatamMdule
 
 import pytorch_lightning as pl
 
-class FreezeBackboneCallback(pl.Callback):
-    def __init__(self, unfreeze_at_epoch=10):
-        self.unfreeze_at_epoch = unfreeze_at_epoch
-
-    def on_epoch_start(self, trainer, pl_module):
-        if trainer.current_epoch == self.unfreeze_at_epoch:
-            for param in pl_module.model.spatial.swinv1.layers[3].parameters():
-                param.requires_grad = True
-            print(f"Backbone has been unfrozen at epoch {self.unfreeze_at_epoch}.")
-
 
 def train(config):
     pl.seed_everything(config.seed_everything, workers=True)
@@ -80,7 +70,7 @@ def train(config):
         default_root_dir='lightning_logs',
         accelerator=config.trainer.accelerator,
         devices=config.trainer.devices,
-        strategy=DDPStrategy(find_unused_parameters=True),
+        strategy=DDPStrategy(find_unused_parameters=False),
         check_val_every_n_epoch=config.trainer.check_val_every_n_epoch,
         max_epochs=config.trainer.max_epochs,
         deterministic=config.trainer.deterministic,
