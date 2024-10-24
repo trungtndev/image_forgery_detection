@@ -44,7 +44,7 @@ class Fusion(nn.Module):
         self.conv2 = nn.Conv2d(d_model, d_model, kernel_size=1)
         self.sigmoid = nn.Tanh()
 
-        # self.cbam = CBAM(channels=d_model, reduction_rate=2, kernel_size=3)
+        self.cbam = CBAM(channels=d_model, reduction_rate=2, kernel_size=3)
 
     def forward(self, feature_1, feature_2):
         out = torch.cat((feature_1, feature_2), dim=1)
@@ -54,7 +54,7 @@ class Fusion(nn.Module):
         attn = self.sigmoid(out)
         out = feature_1 * attn + feature_2 * (1 - attn)
 
-        # out = self.cbam(out)
+        out = self.cbam(out)
 
         return out
 
