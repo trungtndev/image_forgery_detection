@@ -39,6 +39,8 @@ class LitModel(pl.LightningModule):
         )
         # self.train_accuracy = Accuracy(task='multiclass', num_classes=2)
         self.val_accuracy = Accuracy(task='multiclass', num_classes=2)
+        self.test_accuracy = Accuracy(task='multiclass', num_classes=2)
+
         self.save_hyperparameters()
 
     def forward(self, spa, fre):
@@ -113,14 +115,14 @@ class LitModel(pl.LightningModule):
         outputs = self(spa, fre)
 
         loss = self.compute_loss(outputs, labels)
-        self.val_accuracy(outputs.softmax(dim=-1), labels)
+        self.test_accuracy(outputs.softmax(dim=-1), labels)
 
         self.log('test_loss', loss,
                  on_step=False,
                  on_epoch=True,
                  sync_dist=True
                  )
-        self.log('test_acc', self.val_accuracy,
+        self.log('test_acc', self.test_accuracy,
                  on_step=False,
                  on_epoch=True,
                  )

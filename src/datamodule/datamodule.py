@@ -60,7 +60,7 @@ class ImageForgeryDatamMdule(pl.LightningDataModule):
                           batch_size=self.val_batch_size,
                           num_workers=self.num_workers,
                           pin_memory=False,
-                          shuffle=True)
+                          shuffle=False)
 
     def test_dataloader(self):
         return DataLoader(self.test_dataset,
