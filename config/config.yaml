@@ -10,10 +10,10 @@ trainer:
         monitor: val_acc
         mode: max
         filename: '{epoch}-{step}-{val_acc:.4f}'
-  accelerator: cpu
+  accelerator: gpu
   devices: 1
   check_val_every_n_epoch: 2 # 5
-  max_epochs: 50
+  max_epochs: 70
   deterministic: true
 
 wandb:
@@ -27,22 +27,22 @@ model:
   d_model: 256
 
   #spatial transformer
-  requires_grad: false
-  drop_rate: 0.1
-  proj_drop_rate: 0.1
-  attn_drop_rate: 0.1
-  drop_path_rate: 0.1
+  requires_grad: true
+  drop_rate: 0.2
+  proj_drop_rate: 0.2
+  attn_drop_rate: 0.2
+  drop_path_rate: 0.2
 
   growth_rate: 24
-  num_layers: 8
+  num_layers: 16
 
   # training
-  learning_rate: 0.0001
-  weight_decay: 0.0
-  patience: 8
+  learning_rate: 0.000075
+  weight_decay: 0.0005
+  patience: 6
 
 data:
   folder_path: "data/CASIA1"
   num_workers: 4
-  train_batch_size: 32
-  val_batch_size: 16
+  train_batch_size: 16
+  val_batch_size: 8

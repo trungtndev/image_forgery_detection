@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="553fd17e-c948-49ea-b1b5-d41d259d976a" name="Changes" comment="add">
-      <change afterPath="$PROJECT_DIR$/train_state2.py" afterDir="false" />
+    <list default="true" id="553fd17e-c948-49ea-b1b5-d41d259d976a" name="Changes" comment="resume training">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -218,15 +217,10 @@
       <workItem from="1729764855745" duration="100000" />
       <workItem from="1729765120793" duration="7000" />
       <workItem from="1729765828684" duration="1094000" />
-      <workItem from="1730193519530" duration="819000" />
-    </task>
-    <task id="LOCAL-00129" summary="add">
-      <option name="closed" value="true" />
-      <created>1729270355754</created>
-      <option name="number" value="00129" />
-      <option name="presentableId" value="LOCAL-00129" />
-      <option name="project" value="LOCAL" />
-      <updated>1729270355754</updated>
+      <workItem from="1730193519530" duration="1762000" />
+      <workItem from="1730195606887" duration="7000" />
+      <workItem from="1730450133957" duration="846000" />
+      <workItem from="1730472899851" duration="19000" />
     </task>
     <task id="LOCAL-00130" summary="add">
       <option name="closed" value="true" />
@@ -612,7 +606,15 @@
       <option name="project" value="LOCAL" />
       <updated>1729766927282</updated>
     </task>
-    <option name="localTasksCounter" value="178" />
+    <task id="LOCAL-00178" summary="resume training">
+      <option name="closed" value="true" />
+      <created>1730194635866</created>
+      <option name="number" value="00178" />
+      <option name="presentableId" value="LOCAL-00178" />
+      <option name="project" value="LOCAL" />
+      <updated>1730194635867</updated>
+    </task>
+    <option name="localTasksCounter" value="179" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -643,7 +645,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="add" />
-    <option name="LAST_COMMIT_MESSAGE" value="add" />
+    <MESSAGE value="resume training" />
+    <option name="LAST_COMMIT_MESSAGE" value="resume training" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/image_forgery_detection$spatial_module.coverage" NAME="spatial_module Coverage Results" MODIFIED="1728723004343" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/model" />
