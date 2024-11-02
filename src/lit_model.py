@@ -126,6 +126,8 @@ class LitModel(pl.LightningModule):
                  on_step=False,
                  on_epoch=True,
                  )
+    def on_test_epoch_end(self) -> None:
+        print('test_accucary end', self.test_accuracy.compute())
 
     def compute_loss(self, outputs, labels):
         criterion = torch.nn.CrossEntropyLoss()
