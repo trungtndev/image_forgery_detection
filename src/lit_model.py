@@ -101,13 +101,13 @@ class LitModel(pl.LightningModule):
 
         self.log('val_loss', loss,
                  prog_bar=True,
-                 on_step=False,
+                 on_step=True,
                  on_epoch=True,
                  sync_dist=True
                  )
         self.log('val_acc', self.val_accuracy,
                  prog_bar=True,
-                 on_step=False,
+                 on_step=True,
                  on_epoch=True,
                  )
 
