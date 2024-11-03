@@ -30,13 +30,13 @@ class SwinV1Encoder(pl.LightningModule):
         self.swinv1.head = nn.Identity()
 
         for param in self.swinv1.patch_embed.parameters():
-            param.requires_grad = requires_grad
+            param.requires_grad = False
         for param in self.swinv1.layers[0].parameters():
-            param.requires_grad = requires_grad
+            param.requires_grad = False
         for param in self.swinv1.layers[1].parameters():
-            param.requires_grad = requires_grad
+            param.requires_grad = False
         for param in self.swinv1.layers[2].parameters():
-            param.requires_grad = requires_grad
+            param.requires_grad = False
         for param in self.swinv1.layers[3].parameters():
             param.requires_grad = requires_grad
 
