@@ -6,8 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="553fd17e-c948-49ea-b1b5-d41d259d976a" name="Changes" comment="update train dataloader">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/datamodule/datamodule.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/datamodule/datamodule.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lit_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/lit_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/fusion.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/fusion.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/spatial_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/spatial_module.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -224,15 +224,10 @@
       <workItem from="1730450133957" duration="846000" />
       <workItem from="1730472899851" duration="19000" />
       <workItem from="1730571648010" duration="196000" />
-      <workItem from="1730622849665" duration="2293000" />
-    </task>
-    <task id="LOCAL-00135" summary="add">
-      <option name="closed" value="true" />
-      <created>1729322861739</created>
-      <option name="number" value="00135" />
-      <option name="presentableId" value="LOCAL-00135" />
-      <option name="project" value="LOCAL" />
-      <updated>1729322861739</updated>
+      <workItem from="1730622849665" duration="3694000" />
+      <workItem from="1730633464171" duration="137000" />
+      <workItem from="1730638291435" duration="41000" />
+      <workItem from="1730736940968" duration="602000" />
     </task>
     <task id="LOCAL-00136" summary="add">
       <option name="closed" value="true" />
@@ -618,7 +613,15 @@
       <option name="project" value="LOCAL" />
       <updated>1730624948823</updated>
     </task>
-    <option name="localTasksCounter" value="184" />
+    <task id="LOCAL-00184" summary="update train dataloader">
+      <option name="closed" value="true" />
+      <created>1730627134696</created>
+      <option name="number" value="00184" />
+      <option name="presentableId" value="LOCAL-00184" />
+      <option name="project" value="LOCAL" />
+      <updated>1730627134696</updated>
+    </task>
+    <option name="localTasksCounter" value="185" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -1,25 +1,23 @@
 import pytorch_lightning as pl
 import torch
 from torch import nn
-from .cbam import CBAM
+# from .cbam import CBAM
 
 class FeedForward(nn.Module):
     def __init__(self, d_model: int, dropout_rate: float):
         super(FeedForward, self).__init__()
         self.fc1 = nn.Linear(d_model, d_model * 2, bias=True)
-        self.fc2 = nn.Linear(d_model, d_model * 2, bias=True)
-        self.fc3 = nn.Linear(d_model * 2, d_model, bias=True)
-        self.dropout1 = nn.Dropout(dropout_rate)
-        self.act = nn.SiLU()
+        self.fc2 = nn.Linear(d_model * 2, d_model, bias=True)
+        self.dropout = nn.Dropout(dropout_rate)
+        self.act = nn.GELU()
 
 
     def forward(self, x):
-        x1 = self.fc1(x)
-        x2 = self.fc2(x)
-        x = self.act(x1) * x2
-        x = self.dropout1(x)
-        x = self.fc3(x)
-        return x
+        out = self.fc1(x)
+        out = self.act(out)
+        out = self.dropout(out)
+        out = self.fc2(out)
+        return out
 
 
 class Classifer(pl.LightningModule):
@@ -28,7 +26,7 @@ class Classifer(pl.LightningModule):
         self.pool = nn.MaxPool2d((7, 7), stride=(1, 1))
         self.flatten = nn.Flatten()
         self.ffd = FeedForward(input_size, dropout_rate)
-        self.act = nn.ReLU()
+        self.act = nn.GELU()
         self.fc = nn.Linear(input_size, num_classes)
 
     def forward(self, x):
@@ -47,19 +45,19 @@ class Fusion(nn.Module):
         self.conv1 = nn.Conv2d(d_model * 2, d_model, kernel_size=1)
         self.act = nn.ReLU()
         self.conv2 = nn.Conv2d(d_model, d_model, kernel_size=1)
-        self.sigmoid = nn.Tanh()
+        self.tanh = nn.Tanh()
 
-        self.cbam = CBAM(channels=d_model, reduction_rate=2, kernel_size=3)
+        # self.cbam = CBAM(channels=d_model, reduction_rate=2, kernel_size=3)
 
     def forward(self, feature_1, feature_2):
         out = torch.cat((feature_1, feature_2), dim=1)
         out = self.conv1(out)
         out = self.act(out)
         out = self.conv2(out)
-        attn = self.sigmoid(out)
+        attn = (self.tanh(out) + 1) / 2
         out = feature_1 * attn + feature_2 * (1 - attn)
 
-        out = self.cbam(out)
+        # out = self.cbam(out)
 
         return out
 
