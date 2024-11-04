@@ -17,9 +17,8 @@ class SwinV1Encoder(pl.LightningModule):
                  drop_path_rate=0.1,
                  ):
         super().__init__()
-        swinv1_state_dict = (timm.create_model('swin_tiny_patch4_window7_224',
-                                               pretrained=True)
-                             .state_dict())
+        swinv1_state_dict = timm.create_model('swin_tiny_patch4_window7_224',
+                                               pretrained=True).state_dict()
         self.swinv1 = SwinTransformer(
             drop_rate=drop_rate,
             proj_drop_rate=proj_drop_rate,
