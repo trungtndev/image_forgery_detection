@@ -26,7 +26,6 @@ class Classifer(pl.LightningModule):
         super(Classifer, self).__init__()
         self.gru = GRUBlock(input_size, input_size)
         self.flatten = nn.Flatten()
-        self.norm = nn.LayerNorm(input_size)
         self.ffd = FeedForward(input_size, dropout_rate)
         self.act = nn.GELU()
         self.fc = nn.Linear(input_size, num_classes)
@@ -34,7 +33,6 @@ class Classifer(pl.LightningModule):
     def forward(self, x):
         out = self.gru(x)
         out = out[:, -1, :]
-        out = self.norm(out)
         out = self.flatten(out)
         out = out + self.ffd(out)
         out = self.act(out)
