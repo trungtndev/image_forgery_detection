@@ -1,5 +1,6 @@
 import pytorch_lightning as pl
 import torch
+from einops import rearrange
 from torch import nn
 # from .cbam import CBAM
 
@@ -23,14 +24,17 @@ class FeedForward(nn.Module):
 class Classifer(pl.LightningModule):
     def __init__(self, input_size, num_classes, dropout_rate):
         super(Classifer, self).__init__()
-        self.pool = nn.MaxPool2d((7, 7), stride=(1, 1))
+        self.gru = GRUBlock(input_size, input_size)
         self.flatten = nn.Flatten()
+        self.norm = nn.LayerNorm(input_size)
         self.ffd = FeedForward(input_size, dropout_rate)
         self.act = nn.GELU()
         self.fc = nn.Linear(input_size, num_classes)
 
     def forward(self, x):
-        out = self.pool(x)
+        out = self.gru(x)
+        out = out[:, -1, :]
+        out = self.norm(out)
         out = self.flatten(out)
         out = out + self.ffd(out)
         out = self.act(out)
@@ -46,6 +50,7 @@ class Fusion(nn.Module):
         self.act = nn.ReLU()
         self.conv2 = nn.Conv2d(d_model, d_model, kernel_size=1)
         self.tanh = nn.Tanh()
+        self.posnorm = nn.BatchNorm2d(d_model)
 
         # self.cbam = CBAM(channels=d_model, reduction_rate=2, kernel_size=3)
 
@@ -56,11 +61,31 @@ class Fusion(nn.Module):
         out = self.conv2(out)
         attn = (self.tanh(out) + 1) / 2
         out = feature_1 * attn + feature_2 * (1 - attn)
-
+        out = self.posnorm(out)
         # out = self.cbam(out)
 
         return out
 
+class GRUBlock(nn.Module):
+    def __init__(self, input_size, hidden_size):
+        super(GRUBlock, self).__init__()
+        self.hidden_size = hidden_size
+        self.gru = nn.GRUCell(input_size, hidden_size)
+
+    def forward(self, x):
+        # Assuming x has shape (batch_size, sequence_length, input_size)
+        batch_size, sequence_length, input_size = x.size()
+        h = torch.zeros(batch_size, self.hidden_size, device=x.device)
+
+        # Iterate through the sequence
+        outputs = []
+        for i in range(sequence_length):
+            h = self.gru(x[:, i, :], h)
+            outputs.append(h.unsqueeze(1))
+
+        # Concatenate along the sequence dimension
+        outputs = torch.cat(outputs, dim=1)
+        return outputs
 
 class Head(nn.Module):
     def __init__(self, d_model: int, num_classes: int, dropout_rate: float):
@@ -70,6 +95,7 @@ class Head(nn.Module):
 
     def forward(self, x1, x2):
         x = self.fusion(x1, x2)
+        x = rearrange(x, 'b c h w -> b (h w) c')
         return self.classifier(x)
 
 
