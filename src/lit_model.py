@@ -107,7 +107,7 @@ class LitModel(pl.LightningModule):
                  )
         self.log('val_acc', self.val_accuracy,
                  prog_bar=True,
-                 on_step=True,
+                 on_step=False,
                  on_epoch=True,
                  )
 
