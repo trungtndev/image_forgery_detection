@@ -132,8 +132,8 @@ class LitModel(pl.LightningModule):
         print('test_accucary end', self.test_accuracy.compute())
 
     def compute_loss(self, outputs, labels):
-        criterion = torch.nn.CrossEntropyLoss()
-        return criterion(outputs, labels)
+        loss = torch.nn.functional.cross_entropy(outputs, labels, reduction='mean')
+        return loss
 
 
 if __name__ == '__main__':
