@@ -60,7 +60,7 @@ class Fusion(nn.Module):
         attn = (self.tanh(out) + 1) / 2
         out = feature_1 * attn + feature_2 * (1 - attn)
         out = self.posnorm(out)
-        out = self.cbam(out)
+        # out = self.cbam(out)
 
         return out
 
