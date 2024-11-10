@@ -2,7 +2,7 @@ import pytorch_lightning as pl
 import torch
 from einops import rearrange
 from torch import nn
-from .cbam import CBAM
+# from .cbam import CBAM
 
 class FeedForward(nn.Module):
     def __init__(self, d_model: int, dropout_rate: float):
@@ -50,7 +50,7 @@ class Fusion(nn.Module):
         self.tanh = nn.Tanh()
         self.posnorm = nn.BatchNorm2d(d_model)
 
-        self.cbam = CBAM(channels=d_model, reduction_rate=2, kernel_size=3)
+        # self.cbam = CBAM(channels=d_model, reduction_rate=2, kernel_size=3)
 
     def forward(self, feature_1, feature_2):
         out = torch.cat((feature_1, feature_2), dim=1)
